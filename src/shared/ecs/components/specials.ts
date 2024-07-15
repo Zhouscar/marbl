@@ -1,3 +1,3 @@
 import { world } from "../world";
 
-export const Replicated = world.component();
+export const DoNotReconcile = world.component();

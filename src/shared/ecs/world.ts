@@ -1,4 +1,3 @@
-import { Entity, World } from "@rbxts/jecs";
-import { ChangeTracker } from "./trackChanger";
+import { World } from "@rbxts/jecs";
 
 export const world = new World();

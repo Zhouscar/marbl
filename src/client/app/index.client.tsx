@@ -3,7 +3,6 @@ import { createPortal, createRoot } from "@rbxts/react-roblox";
 import { Players } from "@rbxts/services";
 import { RootProvider } from "client/providers/root-provider";
 import { App } from "./app";
-import { State } from "client/providers/world-provider";
 
 const root = createRoot(new Instance("Folder"));
 const target = Players.LocalPlayer.WaitForChild("PlayerGui");

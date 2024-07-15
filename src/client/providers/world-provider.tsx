@@ -1,19 +1,18 @@
 import { Entity, World } from "@rbxts/jecs";
 import React, { createContext } from "@rbxts/react";
 
-export class State {
-	clientToServerEMap: Map<string, Entity> = new Map();
-	serverToClientEMap: Map<string, Entity> = new Map();
+export class WorldState {
+	eMap: Map<string, Entity> = new Map();
 }
 
 export interface WorldProvider extends React.PropsWithChildren {
-	state?: State;
+	worldState?: WorldState;
 }
 
 export const WorldContext = createContext<WorldProvider>({
-	state: new State(),
+	worldState: new WorldState(),
 });
 
-export function WorldProvider({ state = new State(), children }: WorldProvider) {
-	return <WorldContext.Provider value={{ state: state }}>{children}</WorldContext.Provider>;
+export function WorldProvider({ worldState: worldState = new WorldState(), children }: WorldProvider) {
+	return <WorldContext.Provider value={{ worldState: worldState }}>{children}</WorldContext.Provider>;
 }

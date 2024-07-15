@@ -13,4 +13,8 @@ Main goal is to get the game playable, make at least one gun, movement controls 
 
 And something unique about the game.
 
-- [ ] Get use to jecs (trackchanger and everything)
+- [x] Init reflex, jecs, react
+- [x] Replication
+- [ ] Test Replication
+- [ ] Setup tags
+- [ ] Test Setup tags
