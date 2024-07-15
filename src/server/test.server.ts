@@ -1,13 +1,16 @@
 import { makeThrottle } from "shared/closures/make-throttle";
-import { makeTrack, world } from "shared/ecs";
+import { makeTrack, Replicated, world } from "shared/ecs";
+import { Test } from "shared/ecs/components/test";
 import { onTick } from "shared/utils/per-frame";
 
-const Test = world.component<number>();
+world.add(Test, Replicated);
 
 const trackTest = makeTrack(Test);
 const throttle = makeThrottle(1);
 
 const e = world.entity();
+world.set(e, Test, 0);
+
 let i = 0;
 
 onTick(() => {
@@ -16,8 +19,11 @@ onTick(() => {
 	});
 
 	trackTest((changes) => {
+		for (const [e, test] of changes.added()) {
+			print(`Entity Added`);
+		}
 		for (const [e, test] of changes.changed()) {
-			print(test);
+			print(`Entity Added`);
 		}
 	});
 });

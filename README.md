@@ -15,6 +15,6 @@ And something unique about the game.
 
 - [x] Init reflex, jecs, react
 - [x] Replication
-- [ ] Test Replication
+- [x] Test Replication
 - [ ] Setup tags
 - [ ] Test Setup tags

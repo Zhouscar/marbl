@@ -2,7 +2,7 @@ import { Entity } from "@rbxts/jecs";
 import { RunService } from "@rbxts/services";
 import { initComponents, makeTrack, Replicated, TrackFunction, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
-import { ReplicationMap } from "shared/serdes";
+import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 
 export async function initReplication() {
 	initComponents();
@@ -17,7 +17,7 @@ export async function initReplication() {
 		trackMap.set(tostring(component), makeTrack(component));
 	});
 
-	function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: { data?: unknown }) {
+	function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: ComponentDataContainer) {
 		let componentMap = map.get(ekey);
 
 		if (componentMap === undefined) {
@@ -33,7 +33,7 @@ export async function initReplication() {
 
 		replicatedComponents.forEach((component) => {
 			for (const [e, data] of world.query(component)) {
-				setSet(worldPayload, tostring(e), tostring(component), { data: data });
+				setSet(worldPayload, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 			}
 		});
 
@@ -46,12 +46,12 @@ export async function initReplication() {
 		replicatedComponents.forEach((component) => {
 			trackMap.get(tostring(component))!((changes) => {
 				for (const [e, data] of changes.added()) {
-					setSet(worldChanges, tostring(e), tostring(component), { data: data });
+					setSet(worldChanges, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 				}
 
 				for (const [e, data, prevData] of changes.changed()) {
 					if (data === prevData) continue;
-					setSet(worldChanges, tostring(e), tostring(component), { data: data });
+					setSet(worldChanges, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 				}
 
 				for (const [e] of changes.changed()) {

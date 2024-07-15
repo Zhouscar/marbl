@@ -19,12 +19,16 @@ export function ReplicationReciever() {
 				eMap.delete(serverEStr);
 			}
 
-			const componentsToInsert: Set<{ component: Entity; data: unknown }> = new Set();
+			const componentsToInsert: Set<{ component: Entity; data?: unknown; isTag?: boolean }> = new Set();
 			const componentsToRemove: Set<Entity> = new Set();
 
 			componentMap.forEach((container, componentStr) => {
-				if (container.data !== undefined) {
-					componentsToInsert.add({ component: tonumber(componentStr) as Entity, data: container.data });
+				if (container.data !== undefined || container.isTag) {
+					componentsToInsert.add({
+						component: tonumber(componentStr) as Entity,
+						data: container.data,
+						isTag: container.isTag === true,
+					});
 				} else {
 					componentsToRemove.add(tonumber(componentStr) as Entity);
 				}
@@ -34,14 +38,22 @@ export function ReplicationReciever() {
 				const newE = world.entity();
 
 				componentsToInsert.forEach((context) => {
-					world.set(newE, context.component, context.data);
+					if (context.isTag) {
+						world.add(newE, context.component);
+					} else {
+						world.set(newE, context.component, context.data);
+					}
 				});
 
 				eMap.set(serverEStr, newE);
 			} else {
 				if (!componentsToInsert.isEmpty()) {
 					componentsToInsert.forEach((context) => {
-						world.set(e, context.component, context.data);
+						if (context.isTag) {
+							world.add(e, context.component);
+						} else {
+							world.set(e, context.component, context.data);
+						}
 					});
 				}
 				if (!componentsToRemove.isEmpty()) {
