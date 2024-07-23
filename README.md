@@ -55,6 +55,8 @@ And something unique about the game.
 - [x] Replication
 - [x] Test Replication
 - [x] Replication for pairs
-- [ ] Test Replcation for pairs
+- [x] Test Replcation for pairs
+- [x] Change Tracker for pairs
+- [x] Test Change Tracker for pairs
 - [ ] Setup tags
 - [ ] Test Setup tags
