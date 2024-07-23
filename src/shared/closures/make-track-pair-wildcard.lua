@@ -1,5 +1,7 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
+local jecs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "jecs", "src")
 local world = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "ecs", "world").world
+local Wildcard = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "jecs", "src").Wildcard
 
 local function shallowEq(a, b)
     for k, v in a do
@@ -10,9 +12,10 @@ local function shallowEq(a, b)
     return true
 end
 
-local function makeTrack(component)
-    local datas = {}
+local function makeTrackPairWildCard(component)
+    local pairDatas = {}
     local isTrivial = nil
+    local Pair = jecs.pair(component, Wildcard)
 
     return function(fn)
         local added, removed = false, false
@@ -21,21 +24,28 @@ local function makeTrack(component)
         function changes.added()
             added = true
 
-            local q = world:query(component)
+            local q = world:query(Pair)
             return function()
                 local id, data = q:next()
+                local target
                 while true do
                     if not id then
                         return nil
                     end
 
-                    if datas[tostring(id)] == nil then
+                    target = world:target(id, component)
+                    
+                    if pairDatas[tostring(id)] == nil then
+                        pairDatas[tostring(id)] = {}
+                    end
+
+                    if pairDatas[tostring(id)][tostring(target)] == nil then
                         break
                     end
                     
                     id, data = q:next()
                 end
-
+                
                 if isTrivial == nil then
                     isTrivial = typeof(data) ~= "table"
                 end
@@ -43,9 +53,9 @@ local function makeTrack(component)
                 if not isTrivial then
                     data = table.clone(data)
                 end
-
-                datas[tostring(id)] = data
-                return id, data
+                
+                pairDatas[tostring(id)][tostring(target)] = data
+                return id, target, data
             end
         end
 
@@ -53,13 +63,15 @@ local function makeTrack(component)
             local q = world:query(component)
             return function()
                 local id, data = q:next()
-                local prevData
+                local prevData, target
                 while true do
                     if not id then
                         return nil
                     end
 
-                    prevData = datas[tostring(id)]
+                    target = world:target(id, component)
+
+                    prevData = pairDatas[tostring(id)][tostring(target)]
 
                     if prevData ~= nil then
                         if not isTrivial then
@@ -71,37 +83,39 @@ local function makeTrack(component)
                         end
                     end
 
-                    id, data, prevData = q:next()
+                    id, data = q:next()
                 end
 
-                datas[tostring(id)] = data
-
-                return id, data, prevData
+                pairDatas[tostring(id)][tostring(target)] = data
+                return id, target, data, prevData
             end
         end
 
         function changes.removed()
             removed = true
 
-            local removedComponents = {}
-            for idStr, _ in datas do
-                if world:get(tonumber(idStr), component) == nil then
-                    table.insert(removedComponents, tonumber(idStr))
+            local removedPairs = {}
+            for idStr, datas in pairDatas do
+                for targetStr, _ in datas do
+                    if world:get(tonumber(idStr), jecs.pair(component, tonumber(targetStr))) == nil then
+                        table.insert(removedPairs, { id = tonumber(idStr), target = tonumber(targetStr) })
+                    end
                 end
             end
             
             local i = 1
             return function()
-                if i > #removedComponents then
+                if i > #removedPairs then
                     return nil
                 end
                 
                 i += 1
 
-                local id = removedComponents[i - 1]
-                local prevData = datas[tostring(id)]
-                datas[tostring(id)] = nil
-                return id, prevData
+                local id = removedPairs[i - 1].id
+                local target = removedPairs[i - 1].target
+                local prevData = pairDatas[tostring(id)][tostring(target)]
+                pairDatas[tostring(id)][tostring(target)] = nil
+                return id, target, prevData
             end
         end
 
@@ -121,5 +135,5 @@ local function makeTrack(component)
 end
 
 return {
-	makeTrack = makeTrack
+	makeTrackPairWildCard = makeTrackPairWildCard
 }

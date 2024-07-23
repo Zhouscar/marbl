@@ -1,33 +1,42 @@
-import { pair } from "@rbxts/jecs";
+import { pair, Wildcard } from "@rbxts/jecs";
 import { makeThrottle } from "shared/closures/make-throttle";
-import { makeTrack, world } from "shared/ecs";
-import { Test } from "shared/ecs/components/test";
+import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
+import { world } from "shared/ecs";
+import { AttackedBy, Attacker } from "shared/ecs/components";
 import { scheduleTick } from "shared/utils/per-frame";
 
-const parentE = world.entity();
-const ChildOf = world.component<number>();
-const ChildOfParentE = pair(ChildOf, parentE);
+const attacker1 = world.entity();
+world.set(attacker1, Attacker, true);
 
-const throttle = makeThrottle(1, 0);
+const attacker2 = world.entity();
+world.set(attacker2, Attacker, true);
 
-const track = makeTrack(ChildOfParentE);
+const attacked = world.entity();
+
+const throttle1 = makeThrottle(2, 0);
+const throttle2 = makeThrottle(2, 1);
+
+const track = makeTrackPairWildCard(AttackedBy);
 
 scheduleTick(() => {
-	throttle(() => {
-		print("hi");
-		const e = world.entity();
-		world.set(e, ChildOfParentE, 1);
+	throttle1(() => {
+		print(attacker1);
+		world.set(attacked, pair(AttackedBy, attacker1), true);
+		world.remove(attacked, pair(AttackedBy, attacker2));
+	});
+
+	throttle2(() => {
+		print(attacker2);
+		world.set(attacked, pair(AttackedBy, attacker2), true);
+		world.remove(attacked, pair(AttackedBy, attacker1));
 	});
 
 	track((changes) => {
-		for (const [e] of changes.added()) {
-			print("Added");
+		for (const [e, target] of changes.added()) {
+			print("Added AttackedBy " + target);
 		}
-		for (const [e] of changes.changed()) {
-			print("Changed");
-		}
-		for (const [e] of changes.removed()) {
-			print("Removed");
+		for (const [e, target] of changes.removed()) {
+			print("Removed AttackedBy " + target);
 		}
 	});
 });

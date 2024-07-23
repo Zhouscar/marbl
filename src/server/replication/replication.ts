@@ -1,12 +1,14 @@
 import { pair, Wildcard } from "@rbxts/jecs";
-import { RunService } from "@rbxts/services";
 import Sift from "@rbxts/sift";
 import { makeMemos } from "shared/closures/make-memos";
+import { makeTrackPairWildCard, TrackPairWildCardFunction } from "shared/closures/make-track-pair-wildcard";
 import { makeTrack, Replicated, TrackFunction, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
+import { scheduleTick } from "shared/utils/per-frame";
 
 const trackMemos = makeMemos<TrackFunction>();
+const trackPairWildCardMemos = makeMemos<TrackPairWildCardFunction>();
 
 export async function initReplication() {
 	function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: ComponentDataContainer) {
@@ -46,7 +48,7 @@ export async function initReplication() {
 		remotes.world.replicate.fire(player, worldPayload);
 	});
 
-	RunService.Heartbeat.Connect(() => {
+	scheduleTick(() => {
 		const worldChanges: ReplicationMap = new Map();
 		for (const [component] of world.query(Replicated)) {
 			trackMemos(
@@ -83,23 +85,20 @@ export async function initReplication() {
 				}
 			});
 
-			trackMemos(
-				() => makeTrack(pair(component, Wildcard)),
+			trackPairWildCardMemos(
+				() => makeTrackPairWildCard(component),
 				[],
-				tostring("Pair-" + tostring(component)),
+				tostring(tostring(component)),
 			)((changes) => {
-				for (const [e, data] of changes.added()) {
-					const second = world.target(e, component);
-					if (second === undefined) continue;
-					const Pair = pair(component, second);
-					setSet(worldChanges, tostring(e), tostring(Pair), {
+				for (const [e, target, data] of changes.added()) {
+					setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 						data: data,
 						isTag: data === undefined,
-						pair: { first: component, second: second, secondIsEntity: true }, // TODO: wait for world.has to release
+						pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
 					});
 				}
 
-				for (const [e, data, prevData] of changes.changed()) {
+				for (const [e, target, data, prevData] of changes.changed()) {
 					if (
 						data === prevData ||
 						(typeOf(data) === "table" &&
@@ -107,24 +106,18 @@ export async function initReplication() {
 								Sift.Array.equalsDeep(data as object, prevData as object)))
 					)
 						continue;
-					const second = world.target(e, component);
-					if (second === undefined) continue;
-					const Pair = pair(component, second);
-					setSet(worldChanges, tostring(e), tostring(Pair), {
+					setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 						data: data,
 						isTag: data === undefined,
-						pair: { first: component, second: second, secondIsEntity: true }, // TODO: wait for world.has to release
+						pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
 					});
 				}
 
-				for (const [e] of changes.removed()) {
-					const second = world.target(e, component);
-					if (second === undefined) continue;
-					const Pair = pair(component, second);
-					setSet(worldChanges, tostring(e), tostring(Pair), {
+				for (const [e, target, _prevData] of changes.removed()) {
+					setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 						data: undefined,
 						isTag: undefined,
-						pair: { first: component, second: second, secondIsEntity: true }, // TODO: wait for world.has to release
+						pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
 					});
 				}
 			});
@@ -133,5 +126,5 @@ export async function initReplication() {
 		if (!worldChanges.isEmpty()) {
 			remotes.world.replicate.fireAll(worldChanges);
 		}
-	});
+	}, math.huge);
 }
