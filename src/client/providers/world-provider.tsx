@@ -1,4 +1,4 @@
-import { Entity, World } from "@rbxts/jecs";
+import { Entity } from "@rbxts/jecs";
 import React, { createContext } from "@rbxts/react";
 
 export class WorldState {

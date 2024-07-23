@@ -2,8 +2,6 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local jecs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "jecs", "src")
 local world = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "ecs", "world").world
 
-local Previous = world:component()
-
 local function shallowEq(a, b)
     for k, v in a do
         if b[k] ~= v then
@@ -14,75 +12,94 @@ local function shallowEq(a, b)
 end
 
 local function makeTrack(component)
-    local addedComponents = {}
-    local removedComponents = {}
-    local previous = jecs.pair(Previous, component)
+    local components = {}
     local isTrivial = nil
 
     return function(fn)
-        local added = false
-        local removed = false
+        local added, removed = false, false
 
         local changes = {}
         function changes.added()
             added = true
-            local q = world:query(component):without(previous)
+
+            local q = world:query(component)
             return function()
                 local id, data = q:next()
-                if not id then
-                    return nil
-                end
-
-                if isTrivial == nil then
-                    isTrivial = typeof(data) ~= "table"
-                end
-
-                if not isTrivial then
-                    data = table.clone(data)
-                end
-
-                addedComponents[id] = data
-                return id, data
-            end
-        end
-
-        function changes.changed()
-            local q = world:query(component, previous)
-
-            return function()
-                local id, new, old = q:next()
                 while true do
                     if not id then
                         return nil
                     end
 
-                    if not isTrivial then
-                        if not shallowEq(new, old) then
-                            break
-                        end
-                    elseif new ~= old then
+                    if components[tostring(id)] == nil then
                         break
                     end
-
-                    id, new, old = q:next()
+                    
+                    id, data = q:next()
                 end
 
-                addedComponents[id] = new
+                if isTrivial == nil then
+                    isTrivial = typeof(data) ~= "table"
+                end
+                
+                if not isTrivial then
+                    data = table.clone(data)
+                end
 
-                return id, old, new
+                components[tostring(id)] = data
+                return id, data
+            end
+        end
+
+        function changes.changed()
+            local q = world:query(component)
+            return function()
+                local id, data = q:next()
+                local prevData
+                while true do
+                    if not id then
+                        return nil
+                    end
+
+                    prevData = components[tostring(id)]
+
+                    if prevData ~= nil then
+                        if not isTrivial then
+                            if not shallowEq(data, prevData) then
+                                break
+                            end
+                        elseif data ~= prevData then
+                            break
+                        end
+                    end
+
+                    id, data, prevData = q:next()
+                end
+
+                components[tostring(id)] = data
+
+                return id, data, prevData
             end
         end
 
         function changes.removed()
             removed = true
 
-            local q = world:query(previous):without(component)
-            return function()
-                local id = q:next()
-                if id then
-                table.insert(removedComponents, id)
+            local removedComponents = {}
+            for idStr, _ in components do
+                if world:get(tonumber(idStr), component) == nil then
+                    table.insert(removedComponents, tonumber(idStr))
+                    components[idStr] = nil
                 end
-                return id
+            end
+
+            local i = 1
+            return function()
+                if i > #removedComponents then
+                    return nil
+                end
+                
+                i += 1
+                return removedComponents[i - 1]
             end
         end
 
@@ -97,14 +114,6 @@ local function makeTrack(component)
             for _ in changes.removed() do
                 continue
             end
-        end
-
-        for e, data in addedComponents do
-            world:set(e, previous, if isTrivial then data else table.clone(data))
-        end
-
-        for _, e in removedComponents do
-            world:remove(e, previous)
         end
     end
 end

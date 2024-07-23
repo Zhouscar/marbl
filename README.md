@@ -1,11 +1,16 @@
 # marbl
 
-### Tools I will learn to use
+## Problems
 
-- Tarmac
-- Mantle
-- Jecs
-- React
+### Replicating Pairs
+
+An example would be
+
+```ts
+const damaged = pair(DamagedBy, enemyEntity)
+```
+
+Not sure how I will tackle this
 
 ## TODO
 

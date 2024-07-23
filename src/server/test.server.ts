@@ -1,29 +1,32 @@
+import { pair } from "@rbxts/jecs";
 import { makeThrottle } from "shared/closures/make-throttle";
-import { makeTrack, Replicated, world } from "shared/ecs";
-import { Test } from "shared/ecs/components/test";
-import { onTick } from "shared/utils/per-frame";
+import { makeTrack, world } from "shared/ecs";
+import { scheduleTick } from "shared/utils/per-frame";
 
-world.add(Test, Replicated);
+const parentE = world.entity();
+const ChildOf = world.component<number>();
+const ChildOfParentE = pair(ChildOf, parentE);
 
-const trackTest = makeTrack(Test);
-const throttle = makeThrottle(1);
+const throttle = makeThrottle(1, 0);
 
-const e = world.entity();
-world.set(e, Test, 0);
+const track = makeTrack(ChildOfParentE);
 
-let i = 0;
-
-onTick(() => {
+scheduleTick(() => {
 	throttle(() => {
-		world.set(e, Test, i++);
+		print("hi");
+		const e = world.entity();
+		world.set(e, ChildOfParentE, 1);
 	});
 
-	trackTest((changes) => {
-		for (const [e, test] of changes.added()) {
-			print(`Entity Added`);
+	track((changes) => {
+		for (const [e] of changes.added()) {
+			print("Added");
 		}
-		for (const [e, test] of changes.changed()) {
-			print(`Entity Added`);
+		for (const [e] of changes.changed()) {
+			print("Changed");
+		}
+		for (const [e] of changes.removed()) {
+			print("Removed");
 		}
 	});
 });

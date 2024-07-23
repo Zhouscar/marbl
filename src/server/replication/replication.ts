@@ -1,22 +1,14 @@
-import { Entity } from "@rbxts/jecs";
+import { IS_PAIR, pair } from "@rbxts/jecs";
 import { RunService } from "@rbxts/services";
-import { initComponents, makeTrack, Replicated, TrackFunction, world } from "shared/ecs";
+import { makeMemos } from "shared/closures/make-memos";
+import { makeTrack, Replicated, TrackFunction, world } from "shared/ecs";
+import { Test } from "shared/ecs/components/test";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 
+const trackMemos = makeMemos<TrackFunction>();
+
 export async function initReplication() {
-	initComponents();
-
-	const replicatedComponents: Entity[] = [];
-	for (const [component] of world.query(Replicated)) {
-		replicatedComponents.push(component);
-	}
-
-	const trackMap: Map<string, TrackFunction> = new Map();
-	replicatedComponents.forEach((component) => {
-		trackMap.set(tostring(component), makeTrack(component));
-	});
-
 	function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: ComponentDataContainer) {
 		let componentMap = map.get(ekey);
 
@@ -31,20 +23,23 @@ export async function initReplication() {
 	remotes.world.start.connect((player) => {
 		const worldPayload: ReplicationMap = new Map();
 
-		replicatedComponents.forEach((component) => {
+		for (const [component] of world.query(Replicated)) {
 			for (const [e, data] of world.query(component)) {
 				setSet(worldPayload, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 			}
-		});
+		}
 
 		remotes.world.replicate.fire(player, worldPayload);
 	});
 
 	RunService.Heartbeat.Connect(() => {
 		const worldChanges: ReplicationMap = new Map();
-
-		replicatedComponents.forEach((component) => {
-			trackMap.get(tostring(component))!((changes) => {
+		for (const [component] of world.query(Replicated)) {
+			trackMemos(
+				() => makeTrack(component),
+				[],
+				tostring(component),
+			)((changes) => {
 				for (const [e, data] of changes.added()) {
 					setSet(worldChanges, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 				}
@@ -54,11 +49,11 @@ export async function initReplication() {
 					setSet(worldChanges, tostring(e), tostring(component), { data: data, isTag: data === undefined });
 				}
 
-				for (const [e] of changes.changed()) {
+				for (const [e] of changes.removed()) {
 					setSet(worldChanges, tostring(e), tostring(component), { data: undefined });
 				}
 			});
-		});
+		}
 
 		if (!worldChanges.isEmpty()) {
 			remotes.world.replicate.fireAll(worldChanges);
