@@ -33,13 +33,13 @@ local function makeTrackPairWildCard(component)
                         return nil
                     end
 
-                    target = world:target(id, component)
-                    
                     if pairDatas[tostring(id)] == nil then
                         pairDatas[tostring(id)] = {}
                     end
 
-                    if pairDatas[tostring(id)][tostring(target)] == nil then
+                    target = world:target(id, component)
+
+                    if target ~= nil and pairDatas[tostring(id)][tostring(target)] == nil then
                         break
                     end
                     
@@ -115,6 +115,10 @@ local function makeTrackPairWildCard(component)
                 local target = removedPairs[i - 1].target
                 local prevData = pairDatas[tostring(id)][tostring(target)]
                 pairDatas[tostring(id)][tostring(target)] = nil
+
+                if next(pairDatas[tostring(id)]) == nil then
+                    pairDatas[tostring(id)] = {}
+                end
                 return id, target, prevData
             end
         end
