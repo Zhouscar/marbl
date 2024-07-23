@@ -1,12 +1,37 @@
-import { Entity } from "@rbxts/jecs";
+import { Entity, pair } from "@rbxts/jecs";
 import { useEventListener } from "@rbxts/pretty-react-hooks";
-import React from "@rbxts/react";
+import React, { useCallback } from "@rbxts/react";
 import { useWorldState } from "client/hooks/use-world-state";
 import { world } from "shared/ecs";
 import { remotes } from "shared/remotes";
+import { ComponentDataContainer } from "shared/serdes";
 
 export function ReplicationReciever() {
 	const worldState = useWorldState();
+
+	const getComponentFromContainer = useCallback(
+		(container: ComponentDataContainer, componentStr: string) => {
+			const eMap = worldState.eMap;
+			if (container.pair !== undefined) {
+				const first = container.pair.first;
+				let second = container.pair.second;
+
+				if (container.pair.secondIsEntity) {
+					let _second = eMap.get(tostring(second));
+					if (_second === undefined) {
+						_second = world.entity();
+						eMap.set(tostring(second), _second);
+					}
+					second = _second;
+				}
+
+				return pair(first, second);
+			} else {
+				return tonumber(componentStr) as Entity;
+			}
+		},
+		[worldState],
+	);
 
 	useEventListener(remotes.world.replicate, (replicationMap) => {
 		const eMap = worldState.eMap;
@@ -19,18 +44,18 @@ export function ReplicationReciever() {
 				eMap.delete(serverEStr);
 			}
 
-			const componentsToInsert: Set<{ component: Entity; data?: unknown; isTag?: boolean }> = new Set();
+			const componentsToInsert: Set<{ component: Entity } & ComponentDataContainer> = new Set();
 			const componentsToRemove: Set<Entity> = new Set();
 
 			componentMap.forEach((container, componentStr) => {
 				if (container.data !== undefined || container.isTag) {
 					componentsToInsert.add({
-						component: tonumber(componentStr) as Entity,
+						component: getComponentFromContainer(container, componentStr),
 						data: container.data,
 						isTag: container.isTag === true,
 					});
 				} else {
-					componentsToRemove.add(tonumber(componentStr) as Entity);
+					componentsToRemove.add(getComponentFromContainer(container, componentStr));
 				}
 			});
 

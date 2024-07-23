@@ -1,6 +1,7 @@
 import { pair } from "@rbxts/jecs";
 import { makeThrottle } from "shared/closures/make-throttle";
 import { makeTrack, world } from "shared/ecs";
+import { Test } from "shared/ecs/components/test";
 import { scheduleTick } from "shared/utils/per-frame";
 
 const parentE = world.entity();
