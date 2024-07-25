@@ -85,7 +85,7 @@ local function makeTrack(component)
 
             local removedComponents = {}
             for idStr, _ in datas do
-                if world:get(tonumber(idStr), component) == nil then
+                if not world:has(tonumber(idStr), component) then
                     table.insert(removedComponents, tonumber(idStr))
                 end
             end

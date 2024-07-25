@@ -60,7 +60,7 @@ local function makeTrackPairWildCard(component)
         end
 
         function changes.changed()
-            local q = world:query(component)
+            local q = world:query(Pair)
             return function()
                 local id, data = q:next()
                 local prevData, target
@@ -71,15 +71,17 @@ local function makeTrackPairWildCard(component)
 
                     target = world:target(id, component)
 
-                    prevData = pairDatas[tostring(id)][tostring(target)]
+                    if target ~= nil then
+                        prevData = pairDatas[tostring(id)][tostring(target)]
 
-                    if prevData ~= nil then
-                        if not isTrivial then
-                            if not shallowEq(data, prevData) then
+                        if prevData ~= nil then
+                            if not isTrivial then
+                                if not shallowEq(data, prevData) then
+                                    break
+                                end
+                            elseif data ~= prevData then
                                 break
                             end
-                        elseif data ~= prevData then
-                            break
                         end
                     end
 
@@ -97,7 +99,7 @@ local function makeTrackPairWildCard(component)
             local removedPairs = {}
             for idStr, datas in pairDatas do
                 for targetStr, _ in datas do
-                    if world:get(tonumber(idStr), jecs.pair(component, tonumber(targetStr))) == nil then
+                    if not world:has(tonumber(idStr), jecs.pair(component, tonumber(targetStr))) then
                         table.insert(removedPairs, { id = tonumber(idStr), target = tonumber(targetStr) })
                     end
                 end

@@ -1,4 +1,4 @@
-import { Entity, Nullable, World } from "@rbxts/jecs";
+import { Entity } from "@rbxts/jecs";
 
 interface Changes<T = unknown> {
 	added(this: Changes<T>): IterableFunction<LuaTuple<[Entity, Entity, T]>>;

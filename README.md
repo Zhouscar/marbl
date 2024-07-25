@@ -43,8 +43,6 @@ so the damageEntity is created in the client
 so when the damageEntity has something to change about it's health
 the entity is already there in the client.
 
-
-
 ## TODO
 
 Main goal is to get the game playable, make at least one gun, movement controls and one enemy.
@@ -58,5 +56,7 @@ And something unique about the game.
 - [x] Test Replcation for pairs
 - [x] Change Tracker for pairs
 - [x] Test Change Tracker for pairs
-- [ ] Setup tags
+- [x] Setup tags
 - [ ] Test Setup tags
+
+- [ ] Basic components like, remove missing models, update transforms, and update id attribute
