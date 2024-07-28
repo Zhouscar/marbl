@@ -1,5 +1,5 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local world = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "ecs", "world").world
+local world = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "ecs", "world").world
 
 local function shallowEq(a, b)
     for k, v in a do

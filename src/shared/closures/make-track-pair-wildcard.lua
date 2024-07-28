@@ -1,6 +1,6 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local jecs = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "jecs", "src")
-local world = TS.import(script, game:GetService("ReplicatedStorage"), "TS", "ecs", "world").world
+local world = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "ecs", "world").world
 local Wildcard = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "jecs", "src").Wildcard
 
 local function shallowEq(a, b)

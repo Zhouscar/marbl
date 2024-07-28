@@ -1,4 +1,3 @@
-import { pair, Wildcard } from "@rbxts/jecs";
 import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
 import { AttackedBy } from "shared/ecs/components";
 import { scheduleTick } from "shared/utils/per-frame";

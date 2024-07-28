@@ -43,6 +43,17 @@ so the damageEntity is created in the client
 so when the damageEntity has something to change about it's health
 the entity is already there in the client.
 
+### Shared systems
+In matter ecs, because there is a `start` function, the systems in the shared directory can be automatically added.
+
+However, since I'm planning to copy everything from the slither game, `index.server.ts` and `index.client.ts` has been the way to run files, and in ReplicatedStorage scripts and local scripts do not run.
+
+I was thinking that I create another directory called "both" or something so that localscript and scripts can be ran.
+
+Or I should actually just revert everything to what it use to be :(
+
+Or use decorators
+
 ## TODO
 
 Main goal is to get the game playable, make at least one gun, movement controls and one enemy.

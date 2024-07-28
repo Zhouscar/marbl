@@ -8,7 +8,7 @@
 		"$className": "DataModel",
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
-			"TS": {
+			"server": {
 				"$path": "out/server"
 			}
 		},
@@ -23,16 +23,19 @@
 					}
 				}
 			},
-			"TS": {
+			"shared": {
 				"$path": "out/shared"
+			},
+			"client": {
+				"$path": "out/client"
 			}
 		},
 		"StarterPlayer": {
 			"$className": "StarterPlayer",
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
-				"TS": {
-					"$path": "out/client"
+				"runtime": {
+					"$path": "out/client/runtime.client.lua"
 				}
 			}
 		},
