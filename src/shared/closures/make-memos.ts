@@ -1,11 +1,11 @@
 import Sift from "@rbxts/sift";
 
-export function makeMemos<T>() {
-	const valueMap: Map<unknown, T> = new Map();
+export function makeMemos() {
+	const valueMap: Map<unknown, unknown> = new Map();
 	const prevDependenciesMap: Map<unknown, unknown[]> = new Map();
 
-	return (factory: () => T, dependencies: unknown[], discriminator: unknown) => {
-		let value = valueMap.get(discriminator);
+	return <T>(factory: () => T, dependencies: unknown[], discriminator: unknown): T => {
+		let value = valueMap.get(discriminator) as T | undefined;
 		let prevDependencies = prevDependenciesMap.get(discriminator);
 
 		if (value === undefined) {

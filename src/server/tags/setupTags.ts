@@ -6,7 +6,7 @@ import { Renderable, Tagged, Transform, world } from "shared/ecs";
 function spawnBound(instance: PVInstance, component: Entity) {
 	const e = world.entity();
 	world.set(e, Renderable, instance);
-	world.set(e, Transform, instance.GetPivot());
+	world.set(e, Transform, { cf: instance.GetPivot() });
 
 	instance.SetAttribute(E_ATTRIBUTE, e);
 }
@@ -26,7 +26,7 @@ for (const [component, tagName] of world.query(Tagged)) {
 	CollectionService.GetInstanceRemovedSignal(tagName).Connect((instance) => {
 		const e = instance.GetAttribute(E_ATTRIBUTE) as Entity | undefined;
 		if (e !== undefined) {
-			world.delete(e);
+			world.clear(e);
 		}
 	});
 }

@@ -7,8 +7,8 @@ import { remotes } from "shared/remotes";
 import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 import { scheduleTick } from "shared/utils/per-frame";
 
-const trackMemos = makeMemos<TrackFunction>();
-const trackPairWildCardMemos = makeMemos<TrackPairWildCardFunction>();
+const trackMemos = makeMemos();
+const trackPairWildCardMemos = makeMemos();
 
 function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: ComponentDataContainer) {
 	let componentMap = map.get(ekey);
@@ -87,7 +87,7 @@ scheduleTick(() => {
 		trackPairWildCardMemos(
 			() => makeTrackPairWildCard(component),
 			[],
-			tostring(tostring(component)),
+			tostring(component),
 		)((changes) => {
 			for (const [e, target, data] of changes.added()) {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
