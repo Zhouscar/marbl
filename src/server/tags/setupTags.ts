@@ -1,12 +1,11 @@
 import { Entity } from "@rbxts/jecs";
 import { CollectionService } from "@rbxts/services";
 import { E_ATTRIBUTE } from "shared/constants/core";
-import { Renderable, Tagged, Transform, world } from "shared/ecs";
+import { PV, Tagged, world } from "shared/ecs";
 
 function spawnBound(instance: PVInstance, component: Entity) {
 	const e = world.entity();
-	world.set(e, Renderable, instance);
-	world.set(e, Transform, { cf: instance.GetPivot() });
+	world.set(e, PV, instance);
 
 	instance.SetAttribute(E_ATTRIBUTE, e);
 }

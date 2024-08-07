@@ -69,6 +69,6 @@ And something unique about the game.
 - [x] Test Change Tracker for pairs
 - [x] Setup tags
 - [x] Test Setup tags
+- [x] Basic components like, remove missing models, and update id attribute
+- [x] Test it
 
-- [x] Basic components like, remove missing models, update transforms, and update id attribute
-- [ ] Test it

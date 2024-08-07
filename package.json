@@ -25,6 +25,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@rbxts/altmake": "^0.1.5",
     "@rbxts/pretty-react-hooks": "^0.5.2",
     "@rbxts/react": "^0.4.0",
     "@rbxts/react-reflex": "^0.3.4",
