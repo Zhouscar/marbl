@@ -21,7 +21,7 @@ local function makeTrack(component)
         function changes.added()
             added = true
 
-            local q = world:query(component)
+            local q = world:query(component):drain()
             return function()
                 local id, data = q:next()
                 while true do
@@ -44,13 +44,13 @@ local function makeTrack(component)
                     data = table.clone(data)
                 end
 
-                datas[tostring(id)] = data
+                datas[tostring(id)] = data == nil and nil or "TAG"
                 return id, data
             end
         end
 
         function changes.changed()
-            local q = world:query(component)
+            local q = world:query(component):drain()
             return function()
                 local id, data = q:next()
                 local prevData
@@ -66,7 +66,7 @@ local function makeTrack(component)
                             if not shallowEq(data, prevData) then
                                 break
                             end
-                        elseif data ~= prevData then
+                        elseif data ~= prevData and prevData ~= "TAG" then
                             break
                         end
                     end
@@ -74,7 +74,7 @@ local function makeTrack(component)
                     id, data, prevData = q:next()
                 end
 
-                datas[tostring(id)] = data
+                datas[tostring(id)] = data == nil and nil or "TAG"
 
                 return id, data, prevData
             end

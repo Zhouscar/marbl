@@ -59,6 +59,8 @@ Or use decorators
 Main goal is to get the game playable, make at least one gun, movement controls and one enemy.
 
 And something unique about the game.
+- Use react-motion or something, rowind idk
+- Also I should consider about simulation distance once every so often.
 
 - [x] Init reflex, jecs, react
 - [x] Replication
@@ -71,4 +73,12 @@ And something unique about the game.
 - [x] Test Setup tags
 - [x] Basic components like, remove missing models, and update id attribute
 - [x] Test it
+- [x] Marbl movement
 
+- [ ] Marbl spin gadgets
+
+- [ ] Projectile system
+- [ ] Weapon 1: gun
+- [ ] Weapon 2: melee
+
+- [ ] Enemy (AI, weapon)

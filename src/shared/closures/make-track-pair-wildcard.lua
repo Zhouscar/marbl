@@ -24,7 +24,7 @@ local function makeTrackPairWildCard(component)
         function changes.added()
             added = true
 
-            local q = world:query(Pair)
+            local q = world:query(Pair):drain()
             return function()
                 local id, data = q:next()
                 local target
@@ -54,13 +54,13 @@ local function makeTrackPairWildCard(component)
                     data = table.clone(data)
                 end
                 
-                pairDatas[tostring(id)][tostring(target)] = data
+                pairDatas[tostring(id)][tostring(target)] = data == nil and nil or "TAG"
                 return id, target, data
             end
         end
 
         function changes.changed()
-            local q = world:query(Pair)
+            local q = world:query(Pair):drain()
             return function()
                 local id, data = q:next()
                 local prevData, target
@@ -79,7 +79,7 @@ local function makeTrackPairWildCard(component)
                                 if not shallowEq(data, prevData) then
                                     break
                                 end
-                            elseif data ~= prevData then
+                            elseif data ~= prevData and prevData ~= "TAG" then
                                 break
                             end
                         end
@@ -88,7 +88,7 @@ local function makeTrackPairWildCard(component)
                     id, data = q:next()
                 end
 
-                pairDatas[tostring(id)][tostring(target)] = data
+                pairDatas[tostring(id)][tostring(target)] = data == nil and nil or "TAG"
                 return id, target, data, prevData
             end
         end

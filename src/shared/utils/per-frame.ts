@@ -2,9 +2,9 @@ import { RunService } from "@rbxts/services";
 
 export type PerFrameFunction = (dt: number) => void;
 
-const onRender = RunService.RenderStepped;
-const onPhysics = RunService.Stepped;
-const onTick = RunService.Heartbeat;
+export const onRender = RunService.RenderStepped;
+export const onPhysics = RunService.Stepped;
+export const onTick = RunService.Heartbeat;
 
 const renderFunctions: { priority: number; fn: PerFrameFunction }[] = [];
 const physicsFunctions: { priority: number; fn: PerFrameFunction }[] = [];

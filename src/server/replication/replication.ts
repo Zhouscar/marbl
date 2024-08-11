@@ -1,8 +1,8 @@
-import { pair, Wildcard } from "@rbxts/jecs";
+import { Component, pair, Wildcard } from "@rbxts/jecs";
 import Sift from "@rbxts/sift";
 import { makeMemos } from "shared/closures/make-memos";
-import { makeTrackPairWildCard, TrackPairWildCardFunction } from "shared/closures/make-track-pair-wildcard";
-import { makeTrack, Replicated, TrackFunction, world } from "shared/ecs";
+import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
+import { makeTrack, Replicated, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 import { scheduleTick } from "shared/utils/per-frame";
@@ -39,7 +39,7 @@ remotes.world.start.connect((player) => {
 			setSet(worldPayload, tostring(e), tostring(Pair), {
 				data: data,
 				isTag: data === undefined,
-				pair: { first: component, second: second, secondIsEntity: true }, // TODO: wait for world.has to release
+				pair: { first: component, second: second, secondIsEntity: !world.has(e, Component) },
 			});
 		}
 	}
@@ -50,12 +50,19 @@ remotes.world.start.connect((player) => {
 scheduleTick(() => {
 	const worldChanges: ReplicationMap = new Map();
 	for (const [component] of world.query(Replicated)) {
+		// if (component === 3) {
+		// 	print("replicating Plr");
+		// }
+		// if (component === 2) {
+		// 	print("replicating PV");
+		// }
 		trackMemos(
 			() => makeTrack(component),
 			[],
 			tostring(component),
 		)((changes) => {
 			for (const [e, data] of changes.added()) {
+				print(`${component} ${data}`);
 				setSet(worldChanges, tostring(e), tostring(component), {
 					data: data,
 					isTag: data === undefined,
@@ -93,7 +100,7 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: data,
 					isTag: data === undefined,
-					pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
+					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
 				});
 			}
 
@@ -108,7 +115,7 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: data,
 					isTag: data === undefined,
-					pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
+					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
 				});
 			}
 
@@ -116,13 +123,14 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: undefined,
 					isTag: undefined,
-					pair: { first: component, second: target, secondIsEntity: true }, // TODO: wait for world.has to release
+					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
 				});
 			}
 		});
 	}
 
 	if (!worldChanges.isEmpty()) {
+		print(worldChanges);
 		remotes.world.replicate.fireAll(worldChanges);
 	}
 }, math.huge);

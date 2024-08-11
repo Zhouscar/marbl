@@ -14,4 +14,8 @@ export const remotes = createRemotes({
 		replicate: remote<ServerToClient, [replicationMap: ReplicationMap]>(),
 		start: remote<ClientToServer>(),
 	}),
+
+	players: namespace({
+		spawn: remote<ClientToServer>(),
+	}),
 });

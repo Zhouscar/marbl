@@ -23,6 +23,9 @@
 					}
 				}
 			},
+			"assets": {
+				"$path": "assets"
+			},
 			"shared": {
 				"$path": "out/shared"
 			},

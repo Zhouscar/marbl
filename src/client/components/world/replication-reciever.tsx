@@ -35,6 +35,7 @@ export function ReplicationReciever() {
 
 	useEventListener(remotes.world.replicate, (replicationMap) => {
 		const eMap = worldState.eMap;
+		print(replicationMap);
 
 		replicationMap.forEach((componentMap, serverEStr) => {
 			const e = eMap.get(serverEStr);
