@@ -17,7 +17,7 @@ scheduleTick(() => {
 
 	trackRenderable((changes) => {
 		for (const [e, prevPv] of changes.removed()) {
-			prevPv.Destroy();
+			prevPv?.Destroy();
 		}
 	});
 });

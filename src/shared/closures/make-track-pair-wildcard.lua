@@ -116,6 +116,9 @@ local function makeTrackPairWildCard(component)
                 local id = removedPairs[i - 1].id
                 local target = removedPairs[i - 1].target
                 local prevData = pairDatas[tostring(id)][tostring(target)]
+                if prevData == "TAG" then
+                    prevData = nil
+                end
                 pairDatas[tostring(id)][tostring(target)] = nil
 
                 if next(pairDatas[tostring(id)]) == nil then

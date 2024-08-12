@@ -1,17 +1,22 @@
-import React, { useEffect, useMemo } from "@rbxts/react";
+import React, { useEffect, useMemo, useRef } from "@rbxts/react";
 import { ControllerDeviceProps } from "../controller";
 import { useDeferEffect, useEventListener, useKeyPress } from "@rbxts/pretty-react-hooks";
-import { UserInputService } from "@rbxts/services";
+import { Players, UserInputService } from "@rbxts/services";
 import { useSettings } from "client/hooks/use-settings";
+import { onPhysics } from "shared/utils/per-frame";
+import { useConstant } from "client/hooks/use-constant";
 
-export function ComputerController({ move, zoom, rotate, jump }: ControllerDeviceProps) {
+export function ComputerController({ move, zoom, rotate, jump, point, pv }: ControllerDeviceProps) {
 	const forward = useKeyPress(["W", "Up"]);
 	const backward = useKeyPress(["S", "Down"]);
 	const left = useKeyPress(["A", "Left"]);
 	const right = useKeyPress(["D", "Right"]);
 	const space = useKeyPress(["Space"]);
 
+	const mouse = useConstant(Players.LocalPlayer.GetMouse());
 	const settings = useSettings();
+
+	const hitPositionRef = useRef(Vector3.zero);
 
 	const direction = useMemo(() => {
 		let _direction = Vector2.zero;
@@ -37,6 +42,17 @@ export function ComputerController({ move, zoom, rotate, jump }: ControllerDevic
 		}
 		if (input.UserInputType === Enum.UserInputType.MouseWheel) {
 			zoom(input.Position.Z * -5);
+		}
+	});
+
+	useEffect(() => {
+		mouse.TargetFilter = pv;
+	}, [pv]);
+
+	useEventListener(onPhysics, () => {
+		if (mouse.Hit.Position !== hitPositionRef.current) {
+			hitPositionRef.current = mouse.Hit.Position;
+			point(mouse.Hit.Position);
 		}
 	});
 

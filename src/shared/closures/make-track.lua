@@ -100,6 +100,9 @@ local function makeTrack(component)
 
                 local id = removedComponents[i - 1]
                 local prevData = datas[tostring(id)]
+                if prevData == "TAG" then
+                    prevData = nil
+                end
                 datas[tostring(id)] = nil
                 return id, prevData
             end

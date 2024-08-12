@@ -10,7 +10,12 @@ import { scheduleTick } from "shared/utils/per-frame";
 const trackMemos = makeMemos();
 const trackPairWildCardMemos = makeMemos();
 
-function setSet(map: ReplicationMap, ekey: string, componentKey: string, container: ComponentDataContainer) {
+function setSet(
+	map: ReplicationMap,
+	ekey: string,
+	componentKey: string,
+	container: ComponentDataContainer,
+) {
 	let componentMap = map.get(ekey);
 
 	if (componentMap === undefined) {
@@ -39,7 +44,11 @@ remotes.world.start.connect((player) => {
 			setSet(worldPayload, tostring(e), tostring(Pair), {
 				data: data,
 				isTag: data === undefined,
-				pair: { first: component, second: second, secondIsEntity: !world.has(e, Component) },
+				pair: {
+					first: component,
+					second: second,
+					secondIsEntity: !world.has(e, Component),
+				},
 			});
 		}
 	}
@@ -62,7 +71,6 @@ scheduleTick(() => {
 			tostring(component),
 		)((changes) => {
 			for (const [e, data] of changes.added()) {
-				print(`${component} ${data}`);
 				setSet(worldChanges, tostring(e), tostring(component), {
 					data: data,
 					isTag: data === undefined,
@@ -100,7 +108,11 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: data,
 					isTag: data === undefined,
-					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
+					pair: {
+						first: component,
+						second: target,
+						secondIsEntity: !world.has(e, Component),
+					},
 				});
 			}
 
@@ -115,7 +127,11 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: data,
 					isTag: data === undefined,
-					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
+					pair: {
+						first: component,
+						second: target,
+						secondIsEntity: !world.has(e, Component),
+					},
 				});
 			}
 
@@ -123,14 +139,17 @@ scheduleTick(() => {
 				setSet(worldChanges, tostring(e), tostring(pair(component, target)), {
 					data: undefined,
 					isTag: undefined,
-					pair: { first: component, second: target, secondIsEntity: !world.has(e, Component) },
+					pair: {
+						first: component,
+						second: target,
+						secondIsEntity: !world.has(e, Component),
+					},
 				});
 			}
 		});
 	}
 
 	if (!worldChanges.isEmpty()) {
-		print(worldChanges);
 		remotes.world.replicate.fireAll(worldChanges);
 	}
 }, math.huge);

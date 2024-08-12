@@ -74,8 +74,7 @@ And something unique about the game.
 - [x] Basic components like, remove missing models, and update id attribute
 - [x] Test it
 - [x] Marbl movement
-
-- [ ] Marbl spin gadgets
+- [x] Marbl spin gadgets
 
 - [ ] Projectile system
 - [ ] Weapon 1: gun

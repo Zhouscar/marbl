@@ -1,5 +1,5 @@
 import { useCamera, useLatest } from "@rbxts/pretty-react-hooks";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "@rbxts/react";
+import React, { useCallback, useEffect, useMemo, useState } from "@rbxts/react";
 import { useDevice } from "client/hooks/use-device";
 import { ComputerController } from "./controllers/computer";
 import { MobileController } from "./controllers/mobile";
@@ -12,12 +12,15 @@ import { useWorldState } from "client/hooks/use-world-state";
 import { onPhysics, onTick } from "shared/utils/per-frame";
 import { getCustomAngularVelocity, getCustomLinearVelocity } from "shared/utils/memo-forces";
 import { Workspace } from "@rbxts/services";
+import { Maybe } from "shared/utils/monads";
 
 export interface ControllerDeviceProps {
+	pv?: PVInstance;
 	move: (direction: Vector2) => void;
 	jump: () => void;
 	zoom: (delta: number) => void;
 	rotate: (rotateX: number, rotateY: number) => void;
+	point: (position: Vector3) => void;
 }
 
 export function Controller() {
@@ -25,7 +28,7 @@ export function Controller() {
 
 	const localE = useLocalE();
 	const pv = useComponent(localE, PV);
-	const part = useMemo(() => (pv !== undefined ? getPvPrimaryPart(pv) : undefined), [pv]);
+	const part = useMemo(() => new Maybe(pv).bind(getPvPrimaryPart).get(), [pv]);
 
 	const camera = useCamera();
 	const worldState = useWorldState();
@@ -143,16 +146,45 @@ export function Controller() {
 		[part],
 	);
 
+	const point = useCallback(
+		(position: Vector3) => {
+			if (part === undefined) return;
+			worldState.pointAt = position;
+		},
+		[part],
+	);
+
 	return (
 		<>
 			{device === "computer" && (
-				<ComputerController move={move} zoom={zoom} rotate={rotate} jump={jump} />
+				<ComputerController
+					pv={pv}
+					move={move}
+					zoom={zoom}
+					rotate={rotate}
+					jump={jump}
+					point={point}
+				/>
 			)}
 			{device === "gamepad" && (
-				<GamepadController move={move} zoom={zoom} rotate={rotate} jump={jump} />
+				<GamepadController
+					pv={pv}
+					move={move}
+					zoom={zoom}
+					rotate={rotate}
+					jump={jump}
+					point={point}
+				/>
 			)}
 			{device === "mobile" && (
-				<MobileController move={move} zoom={zoom} rotate={rotate} jump={jump} />
+				<MobileController
+					pv={pv}
+					move={move}
+					zoom={zoom}
+					rotate={rotate}
+					jump={jump}
+					point={point}
+				/>
 			)}
 		</>
 	);

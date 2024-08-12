@@ -22,7 +22,11 @@ export function findPath<T extends keyof Instances>(
 	return !cancelled && current.IsA(className) ? current : undefined;
 }
 
-export function waitForPath<T extends keyof Instances>(parent: Instance, path: string, className: T): Instances[T] {
+export function waitForPath<T extends keyof Instances>(
+	parent: Instance,
+	path: string,
+	className: T,
+): Instances[T] {
 	let current = parent;
 
 	path.split("/").forEach((to) => {

@@ -4,9 +4,12 @@ import { createCustomRotation } from "shared/utils/cframe.utils";
 
 export class WorldState {
 	eMap: Map<string, Entity> = new Map();
+
 	cameraDistance: number = 20;
 	rotationX: number = 0;
 	rotationY: number = 0;
+
+	pointAt: Vector3 = Vector3.zero;
 }
 
 export interface WorldProvider extends React.PropsWithChildren {

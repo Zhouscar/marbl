@@ -1,7 +1,6 @@
 import { useCamera } from "@rbxts/pretty-react-hooks";
 import React, { useEffect, useMemo } from "@rbxts/react";
 import { Workspace } from "@rbxts/services";
-import { useMotion } from "client/hooks/ripple";
 import { useComponent } from "client/hooks/use-component";
 import { useLocalE } from "client/hooks/use-local-e";
 import { useSpringed } from "client/hooks/use-springed";
