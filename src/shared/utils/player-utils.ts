@@ -1,4 +1,5 @@
-import { Players } from "@rbxts/services";
+import { Players, RunService } from "@rbxts/services";
+import { Plr, world } from "shared/ecs";
 
 // const characterSchema = {
 // 	$className: "Model",
@@ -19,6 +20,19 @@ import { Players } from "@rbxts/services";
 // export async function promiseCharacter(character: Model): Promise<Character> {
 // 	return promiseTree(character, characterSchema).timeout(30, "Character timed out");
 // }
+
+export function getPlayerE(player: Player) {
+	for (const [e, _player] of world.query(Plr)) {
+		if (_player !== player) continue;
+		return e;
+	}
+
+	if (RunService.IsServer()) {
+		const e = world.entity();
+		world.set(e, Plr, player);
+		return e;
+	}
+}
 
 export async function promisePlayerDisconnected(player: Player): Promise<void> {
 	if (!player.IsDescendantOf(Players)) {

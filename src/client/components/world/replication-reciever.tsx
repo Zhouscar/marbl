@@ -1,6 +1,7 @@
 import { Entity, pair } from "@rbxts/jecs";
 import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React, { useCallback } from "@rbxts/react";
+import { Players } from "@rbxts/services";
 import { useWorldState } from "client/hooks/use-world-state";
 import { world } from "shared/ecs";
 import { remotes } from "shared/remotes";
@@ -33,11 +34,13 @@ export function ReplicationReciever() {
 		[worldState],
 	);
 
-	useEventListener(remotes.world.replicate, (replicationMap) => {
+	useEventListener(remotes.world.replicate, (replicationMap, clientInitializedMap) => {
 		const eMap = worldState.eMap;
 		print(replicationMap);
 
 		replicationMap.forEach((componentMap, serverEStr) => {
+			if (clientInitializedMap.get(serverEStr) === Players.LocalPlayer) return;
+
 			const e = eMap.get(serverEStr);
 
 			if (e !== undefined && next(componentMap) === undefined) {
@@ -45,7 +48,8 @@ export function ReplicationReciever() {
 				eMap.delete(serverEStr);
 			}
 
-			const componentsToInsert: Set<{ component: Entity } & ComponentDataContainer> = new Set();
+			const componentsToInsert: Set<{ component: Entity } & ComponentDataContainer> =
+				new Set();
 			const componentsToRemove: Set<Entity> = new Set();
 
 			componentMap.forEach((container, componentStr) => {

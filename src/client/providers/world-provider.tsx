@@ -1,6 +1,5 @@
 import { Entity } from "@rbxts/jecs";
 import React, { createContext } from "@rbxts/react";
-import { createCustomRotation } from "shared/utils/cframe.utils";
 
 export class WorldState {
 	eMap: Map<string, Entity> = new Map();
@@ -10,6 +9,7 @@ export class WorldState {
 	rotationY: number = 0;
 
 	pointAt: Vector3 = Vector3.zero;
+	activated: boolean = false;
 }
 
 export interface WorldProvider extends React.PropsWithChildren {

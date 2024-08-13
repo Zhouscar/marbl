@@ -1,7 +1,15 @@
 import { BroadcastAction } from "@rbxts/reflex";
-import { Client as ServerToClient, Server as ClientToServer, namespace, remote, createRemotes } from "@rbxts/remo";
+import {
+	Client as ServerToClient,
+	Server as ClientToServer,
+	namespace,
+	remote,
+	createRemotes,
+} from "@rbxts/remo";
 import { SharedState } from "./store";
-import { ReplicationMap } from "./serdes";
+import { ClientInitializedMap, ReplicationMap } from "./serdes";
+import { EntityType } from "@rbxts/jecs";
+import { InitProjectile, Positioner } from "./ecs";
 
 export const remotes = createRemotes({
 	store: namespace({
@@ -11,11 +19,18 @@ export const remotes = createRemotes({
 	}),
 
 	world: namespace({
-		replicate: remote<ServerToClient, [replicationMap: ReplicationMap]>(),
+		replicate: remote<
+			ServerToClient,
+			[replicationMap: ReplicationMap, clientInitializedMap: ClientInitializedMap]
+		>(),
 		start: remote<ClientToServer>(),
 	}),
 
 	players: namespace({
 		spawn: remote<ClientToServer>(),
+		shootProjectile: remote<
+			ClientToServer,
+			[projectileContext: EntityType<typeof InitProjectile>]
+		>(),
 	}),
 });

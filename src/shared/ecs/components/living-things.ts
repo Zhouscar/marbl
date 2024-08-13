@@ -1,5 +1,6 @@
-import { GadgetType } from "shared/gadgets";
 import { world } from "../world";
+import { EntityType } from "@rbxts/jecs";
+import { InitGadgets } from "./gadgets";
 
 export const Living = world.component<undefined>();
 
@@ -8,10 +9,7 @@ export const InitMarbl = world.component<{
 	cf: CFrame;
 	color: Color3;
 	material: Enum.Material;
-	gadgets: {
-		gadgetType: GadgetType;
-		rotationOffset: CFrame;
-	}[];
+	gadgets?: EntityType<typeof InitGadgets>;
 }>();
 
 export const Marbl = world.component<undefined>();

@@ -54,6 +54,20 @@ Or I should actually just revert everything to what it use to be :(
 
 Or use decorators
 
+### Projectile Systems
+
+Some things I'm looking forward projectile system are these things:
+- player initiated projectiles
+- client sided projectile movement
+
+I'm thinking since a projectile has a very straightforward path (excluding tracked projectiles)
+I can make them strictly based on positioners
+
+Honestly, tracked projectiles is just a series of positioners with changed acceleration and I think it's doable, but not now.
+
+Positioners, and a DoNotReplicate component so that it doensn't replicate back.
+
+
 ## TODO
 
 Main goal is to get the game playable, make at least one gun, movement controls and one enemy.
@@ -77,6 +91,7 @@ And something unique about the game.
 - [x] Marbl spin gadgets
 
 - [ ] Projectile system
+
 - [ ] Weapon 1: gun
 - [ ] Weapon 2: melee
 

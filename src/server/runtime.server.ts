@@ -1,6 +1,9 @@
 import { ReplicatedStorage, ServerScriptService } from "@rbxts/services";
 
-const containers = [ServerScriptService.WaitForChild("server"), ReplicatedStorage.WaitForChild("shared")];
+const containers = [
+	ReplicatedStorage.WaitForChild("shared"),
+	ServerScriptService.WaitForChild("server"),
+];
 
 containers.forEach((container) => {
 	container
@@ -8,7 +11,10 @@ containers.forEach((container) => {
 		.filter((instance): instance is ModuleScript => instance.IsA("ModuleScript"))
 		.forEach((module) => {
 			task.spawn(() => {
-				require(module);
+				const [ok, reason] = pcall(require, module);
+				if (!ok) {
+					warn(reason);
+				}
 			});
 		});
 });

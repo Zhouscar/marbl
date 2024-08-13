@@ -1,14 +1,25 @@
-import { Component, pair, Wildcard } from "@rbxts/jecs";
+import { Component, Entity, pair, Wildcard } from "@rbxts/jecs";
 import Sift from "@rbxts/sift";
 import { makeMemos } from "shared/closures/make-memos";
 import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
-import { makeTrack, Replicated, world } from "shared/ecs";
+import {
+	ClientInitializedBy,
+	makeTrack,
+	PseudoComponent,
+	Replicated,
+	ReplicatedPair,
+	world,
+} from "shared/ecs";
 import { remotes } from "shared/remotes";
-import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
+import { ClientInitializedMap, ComponentDataContainer, ReplicationMap } from "shared/serdes";
 import { scheduleTick } from "shared/utils/per-frame";
 
 const trackMemos = makeMemos();
 const trackPairWildCardMemos = makeMemos();
+
+function shouldTreatAsEntity(e: Entity) {
+	return !world.has(e, Component) && !world.has(e, PseudoComponent);
+}
 
 function setSet(
 	map: ReplicationMap,
@@ -28,6 +39,7 @@ function setSet(
 
 remotes.world.start.connect((player) => {
 	const worldPayload: ReplicationMap = new Map();
+	const clientInitializedMap: ClientInitializedMap = new Map();
 
 	for (const [component] of world.query(Replicated)) {
 		for (const [e, data] of world.query(component)) {
@@ -36,7 +48,9 @@ remotes.world.start.connect((player) => {
 				isTag: data === undefined,
 			});
 		}
+	}
 
+	for (const [component] of world.query(ReplicatedPair)) {
 		for (const [e, data] of world.query(pair(component, Wildcard))) {
 			const second = world.target(e, component);
 			if (second === undefined) continue;
@@ -47,24 +61,23 @@ remotes.world.start.connect((player) => {
 				pair: {
 					first: component,
 					second: second,
-					secondIsEntity: !world.has(e, Component),
+					secondIsEntity: shouldTreatAsEntity(second),
 				},
 			});
 		}
 	}
 
-	remotes.world.replicate.fire(player, worldPayload);
+	for (const [e, player] of world.query(ClientInitializedBy)) {
+		clientInitializedMap.set(tostring(e), player);
+	}
+
+	remotes.world.replicate.fire(player, worldPayload, clientInitializedMap);
 });
 
 scheduleTick(() => {
 	const worldChanges: ReplicationMap = new Map();
+
 	for (const [component] of world.query(Replicated)) {
-		// if (component === 3) {
-		// 	print("replicating Plr");
-		// }
-		// if (component === 2) {
-		// 	print("replicating PV");
-		// }
 		trackMemos(
 			() => makeTrack(component),
 			[],
@@ -98,7 +111,9 @@ scheduleTick(() => {
 				});
 			}
 		});
+	}
 
+	for (const [component] of world.query(ReplicatedPair)) {
 		trackPairWildCardMemos(
 			() => makeTrackPairWildCard(component),
 			[],
@@ -111,7 +126,7 @@ scheduleTick(() => {
 					pair: {
 						first: component,
 						second: target,
-						secondIsEntity: !world.has(e, Component),
+						secondIsEntity: shouldTreatAsEntity(target),
 					},
 				});
 			}
@@ -130,7 +145,7 @@ scheduleTick(() => {
 					pair: {
 						first: component,
 						second: target,
-						secondIsEntity: !world.has(e, Component),
+						secondIsEntity: shouldTreatAsEntity(target),
 					},
 				});
 			}
@@ -142,7 +157,7 @@ scheduleTick(() => {
 					pair: {
 						first: component,
 						second: target,
-						secondIsEntity: !world.has(e, Component),
+						secondIsEntity: shouldTreatAsEntity(target),
 					},
 				});
 			}
@@ -150,6 +165,11 @@ scheduleTick(() => {
 	}
 
 	if (!worldChanges.isEmpty()) {
-		remotes.world.replicate.fireAll(worldChanges);
+		const clientInitializedMap: ClientInitializedMap = new Map();
+		for (const [e, player] of world.query(ClientInitializedBy)) {
+			clientInitializedMap.set(tostring(e), player);
+		}
+
+		remotes.world.replicate.fireAll(worldChanges, clientInitializedMap);
 	}
 }, math.huge);

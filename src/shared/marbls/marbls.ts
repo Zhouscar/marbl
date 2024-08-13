@@ -4,7 +4,7 @@ import { waitForPath } from "shared/utils/indexing-utils";
 
 const marbl = waitForPath(ReplicatedStorage, "assets/models/marbl", "Part");
 
-export function getMarbl() {
+export function getMarblPV() {
 	const newMarbl = marbl.Clone();
 	Modify(newMarbl, {
 		Parent: Workspace,

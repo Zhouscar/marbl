@@ -4,7 +4,6 @@ import { useDevice } from "client/hooks/use-device";
 import { ComputerController } from "./controllers/computer";
 import { MobileController } from "./controllers/mobile";
 import { GamepadController } from "./controllers/gamepad";
-import { useLocalE } from "client/hooks/use-local-e";
 import { useComponent } from "client/hooks/use-component";
 import { PV } from "shared/ecs";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
@@ -13,6 +12,7 @@ import { onPhysics, onTick } from "shared/utils/per-frame";
 import { getCustomAngularVelocity, getCustomLinearVelocity } from "shared/utils/memo-forces";
 import { Workspace } from "@rbxts/services";
 import { Maybe } from "shared/utils/monads";
+import { useLocalE } from "client/hooks/use-local-e";
 
 export interface ControllerDeviceProps {
 	pv?: PVInstance;
@@ -21,6 +21,7 @@ export interface ControllerDeviceProps {
 	zoom: (delta: number) => void;
 	rotate: (rotateX: number, rotateY: number) => void;
 	point: (position: Vector3) => void;
+	activate: (activated: boolean) => void;
 }
 
 export function Controller() {
@@ -49,7 +50,12 @@ export function Controller() {
 	const groundedRef = useLatest(grounded);
 
 	useEffect(() => {
-		if (part === undefined) return;
+		if (part === undefined) {
+			setInputDirection(Vector2.zero);
+			setGrounded(false);
+			worldState.pointAt = Vector3.zero;
+			return;
+		}
 
 		part.CustomPhysicalProperties = new PhysicalProperties(1, 2, 0);
 
@@ -154,6 +160,14 @@ export function Controller() {
 		[part],
 	);
 
+	const activate = useCallback(
+		(activated: boolean) => {
+			if (part === undefined) return;
+			worldState.activated = activated;
+		},
+		[part],
+	);
+
 	return (
 		<>
 			{device === "computer" && (
@@ -164,6 +178,7 @@ export function Controller() {
 					rotate={rotate}
 					jump={jump}
 					point={point}
+					activate={activate}
 				/>
 			)}
 			{device === "gamepad" && (
@@ -174,6 +189,7 @@ export function Controller() {
 					rotate={rotate}
 					jump={jump}
 					point={point}
+					activate={activate}
 				/>
 			)}
 			{device === "mobile" && (
@@ -184,6 +200,7 @@ export function Controller() {
 					rotate={rotate}
 					jump={jump}
 					point={point}
+					activate={activate}
 				/>
 			)}
 		</>

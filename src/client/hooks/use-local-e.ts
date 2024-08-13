@@ -2,15 +2,11 @@ import { useEventListener, useLatest } from "@rbxts/pretty-react-hooks";
 import { useState } from "@rbxts/react";
 import { Players } from "@rbxts/services";
 import { LAST_E } from "shared/constants/core";
-import { Plr, world } from "shared/ecs";
 import { onTick } from "shared/utils/per-frame";
+import { getPlayerE } from "shared/utils/player-utils";
 
 function getLocalE() {
-	for (const [e, player] of world.query(Plr)) {
-		if (player !== Players.LocalPlayer) continue;
-		return e;
-	}
-	return LAST_E;
+	return getPlayerE(Players.LocalPlayer) ?? LAST_E;
 }
 
 export function useLocalE() {
