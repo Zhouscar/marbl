@@ -1,3 +1,3 @@
-import { GadgetType } from "shared/gadgets";
+import { GadgetVariant } from "shared/gadgets";
 
-export function getGadgetEs(gadgetType: GadgetType) {}
+export function getGadgetEs(gadgetType: GadgetVariant) {}

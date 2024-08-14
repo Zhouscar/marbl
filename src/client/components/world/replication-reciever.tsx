@@ -26,6 +26,8 @@ export function ReplicationReciever() {
 					second = _second;
 				}
 
+				print(first, second);
+
 				return pair(first, second);
 			} else {
 				return tonumber(componentStr) as Entity;

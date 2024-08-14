@@ -11,3 +11,5 @@ export const E_ATTRIBUTE = RunService.IsServer()
 		: "unknownE";
 
 export const LAST_E = (math.pow(2, 40) - 1) as Entity;
+
+export const CASTER_ATTACHMENT_NAME = "CASTER_ATTACHMENT";

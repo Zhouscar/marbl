@@ -1,12 +1,12 @@
 import React from "@rbxts/react";
 import { GadgetsPointAt } from "./gadgets-point-at";
-import { GadgetTypes } from "./gadget-types";
+import { GadgetVariants } from "./gadget-variants";
 
 export function Gadgets() {
 	return (
 		<>
 			<GadgetsPointAt />
-			<GadgetTypes />
+			<GadgetVariants />
 		</>
 	);
 }

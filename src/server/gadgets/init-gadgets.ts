@@ -3,13 +3,13 @@ import {
 	GadgetNameAs,
 	GadgetOf,
 	GadgetRotationOffset,
-	GadgetTypeAs,
+	GadgetVariantAs,
 	InitGadgets,
 	Plr,
 	PV,
 	world,
 } from "shared/ecs";
-import { GadgetNameIdentifiers, Gadgets, GadgetTypeIdentifiers, getGadgetPV } from "shared/gadgets";
+import { GadgetNameIdEs, Gadgets, GadgetVariantIdEs, getGadgetPV } from "shared/gadgets";
 import { scheduleTick } from "shared/utils/per-frame";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
 
@@ -32,11 +32,11 @@ scheduleTick(() => {
 				getPvPrimaryPart(gadgetModel)?.SetNetworkOwner(player);
 			}
 
-			const gadgetNameId = GadgetNameIdentifiers[gadgetContext.gadgetName];
-			const gadgetTypeId = GadgetTypeIdentifiers[Gadgets[gadgetContext.gadgetName].type];
+			const gadgetNameId = GadgetNameIdEs[gadgetContext.gadgetName];
+			const gadgetTypeId = GadgetVariantIdEs[Gadgets[gadgetContext.gadgetName].type];
 
 			world.add(gadgetE, pair(GadgetNameAs, gadgetNameId));
-			world.add(gadgetE, pair(GadgetTypeAs, gadgetTypeId));
+			world.add(gadgetE, pair(GadgetVariantAs, gadgetTypeId));
 		});
 
 		world.remove(e, InitGadgets);

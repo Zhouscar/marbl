@@ -4,7 +4,7 @@ import { Gadget_Gun_Semi } from "./gadget-gun-semi";
 import { Gadget_Melee_Spin } from "./gadget-melee-spin";
 import { Gadget_Melee_Stab } from "./gadget-melee-stab";
 
-export function GadgetTypes() {
+export function GadgetVariants() {
 	return (
 		<>
 			<Gadget_Gun_Auto />

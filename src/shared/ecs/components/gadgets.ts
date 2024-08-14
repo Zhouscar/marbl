@@ -9,11 +9,14 @@ export const InitGadgets = world.component<
 	}[]
 >();
 
+export const GunOfGadget = world.component<{ body: Model; shootPart: BasePart }>();
+export const MeleeOfGadget = world.component<{ body: Model; casterAttachments: Attachment[] }>();
+
 export const GadgetOf = world.component();
 world.add(GadgetOf, ReplicatedPair);
 
-export const GadgetTypeAs = world.component();
-world.add(GadgetTypeAs, ReplicatedPair);
+export const GadgetVariantAs = world.component();
+world.add(GadgetVariantAs, ReplicatedPair);
 
 export const GadgetNameAs = world.component();
 world.add(GadgetNameAs, ReplicatedPair);
