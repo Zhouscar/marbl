@@ -4,12 +4,16 @@ import { ReplicatedPair } from "./network";
 
 export const InitProjectile = world.component<{
 	player?: Player;
-	creator?: Entity;
+	creatorE?: Entity;
+	creatorGadgetE?: Entity;
 	startTime: number;
 	position: Vector3;
 	velocity: Vector3;
 	acceleration: Vector3;
 }>();
 
-export const ProjectileBy = world.component();
-world.add(ProjectileBy, ReplicatedPair);
+export const ProjectileByGadget = world.component();
+world.add(ProjectileByGadget, ReplicatedPair);
+
+export const ProjectileByCreator = world.component();
+world.add(ProjectileByCreator, ReplicatedPair);

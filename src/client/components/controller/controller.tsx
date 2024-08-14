@@ -163,7 +163,15 @@ export function Controller() {
 	const activate = useCallback(
 		(activated: boolean) => {
 			if (part === undefined) return;
-			worldState.activated = activated;
+			if (activated) {
+				worldState.activated = true;
+			} else {
+				task.spawn(() => {
+					task.wait();
+					task.wait();
+					worldState.activated = false;
+				});
+			}
 		},
 		[part],
 	);

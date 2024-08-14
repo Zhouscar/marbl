@@ -6,7 +6,15 @@ import { useSettings } from "client/hooks/use-settings";
 import { onPhysics } from "shared/utils/per-frame";
 import { useConstant } from "client/hooks/use-constant";
 
-export function ComputerController({ move, zoom, rotate, jump, point, pv }: ControllerDeviceProps) {
+export function ComputerController({
+	move,
+	zoom,
+	rotate,
+	jump,
+	point,
+	activate,
+	pv,
+}: ControllerDeviceProps) {
 	const forward = useKeyPress(["W", "Up"]);
 	const backward = useKeyPress(["S", "Down"]);
 	const left = useKeyPress(["A", "Left"]);
@@ -31,6 +39,14 @@ export function ComputerController({ move, zoom, rotate, jump, point, pv }: Cont
 		if (!space) return;
 		jump();
 	}, [space]);
+
+	useEventListener(mouse.Button1Down, () => {
+		activate(true);
+	});
+
+	useEventListener(mouse.Button1Up, () => {
+		activate(false);
+	});
 
 	useEventListener(UserInputService.InputChanged, (input, gPE) => {
 		if (gPE) return;

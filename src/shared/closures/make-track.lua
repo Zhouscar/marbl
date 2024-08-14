@@ -44,7 +44,7 @@ local function makeTrack(component)
                     data = table.clone(data)
                 end
 
-                datas[tostring(id)] = data == nil and nil or "TAG"
+                datas[tostring(id)] = data ~= nil and data or "TAG"
                 return id, data
             end
         end
@@ -64,6 +64,7 @@ local function makeTrack(component)
                     if prevData ~= nil then
                         if not isTrivial then
                             if not shallowEq(data, prevData) then
+                                print(id)
                                 break
                             end
                         elseif data ~= prevData and prevData ~= "TAG" then
@@ -74,7 +75,7 @@ local function makeTrack(component)
                     id, data, prevData = q:next()
                 end
 
-                datas[tostring(id)] = data == nil and nil or "TAG"
+                datas[tostring(id)] = data ~= nil and data or "TAG"
 
                 return id, data, prevData
             end

@@ -5,18 +5,23 @@ import { LAST_E } from "shared/constants/core";
 import { onTick } from "shared/utils/per-frame";
 import { getPlayerE } from "shared/utils/player-utils";
 
-function getLocalE() {
+function _getLocalE() {
 	return getPlayerE(Players.LocalPlayer) ?? LAST_E;
 }
 
+let _localE = _getLocalE();
+
+onTick.Connect(() => {
+	_localE = _getLocalE();
+});
+
 export function useLocalE() {
-	const [e, setE] = useState(getLocalE());
+	const [e, setE] = useState(_localE);
 	const eRef = useLatest(e);
 
 	useEventListener(onTick, () => {
-		const newE = getLocalE();
-		if (eRef.current === newE) return;
-		setE(newE);
+		if (eRef.current === _localE) return;
+		setE(_localE);
 	});
 
 	return e;

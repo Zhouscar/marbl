@@ -54,7 +54,7 @@ local function makeTrackPairWildCard(component)
                     data = table.clone(data)
                 end
                 
-                pairDatas[tostring(id)][tostring(target)] = data == nil and nil or "TAG"
+                pairDatas[tostring(id)][tostring(target)] = data ~= nil and data or "TAG"
                 return id, target, data
             end
         end
@@ -88,7 +88,7 @@ local function makeTrackPairWildCard(component)
                     id, data = q:next()
                 end
 
-                pairDatas[tostring(id)][tostring(target)] = data == nil and nil or "TAG"
+                pairDatas[tostring(id)][tostring(target)] = data ~= nil and data or "TAG"
                 return id, target, data, prevData
             end
         end

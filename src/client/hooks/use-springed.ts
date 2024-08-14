@@ -11,14 +11,14 @@ export function useSpringed<T>(
 
 export function useSpringed<T, U extends MotionGoal>(
 	container: T,
-	key: ExtractKeys<T, U>,
+	key: Extract<keyof T, U>,
 	stepEvent: RBXScriptSignal,
 	options?: SpringOptions,
 ): React.Binding<U>;
 
 export function useSpringed<T, U extends MotionGoal>(
 	container: T,
-	key: ExtractKeys<T, U>,
+	key: Extract<keyof T, U>,
 	stepEvent: RBXScriptSignal,
 	options?: SpringOptions,
 ) {
