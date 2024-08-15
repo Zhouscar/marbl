@@ -90,9 +90,12 @@ And something unique about the game.
 - [x] Marbl movement
 - [x] Marbl spin gadgets
 
-- [ ] Projectile system
+- [x] Projectile spawn
+- [x] Projectile shoot
+- [ ] Projectile lifetime
+- [ ] Projectile hit
 
-- [ ] Weapon 1: gun
-- [ ] Weapon 2: melee
+- [ ] Melee spin
+- [ ] Melee stab
 
 - [ ] Enemy (AI, weapon)
