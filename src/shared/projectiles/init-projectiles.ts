@@ -51,7 +51,7 @@ scheduleTick(() => {
 
 		if (RunService.IsClient()) {
 			const instance = projectileCache.GetPart(
-				CFrame.lookAt(context.position, context.velocity),
+				CFrame.lookAlong(context.position, context.velocity),
 			);
 			instance.trail.Enabled = true;
 			world.set(e, CachedInstance, {

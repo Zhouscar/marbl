@@ -29,7 +29,7 @@ export function Gadget_Gun_Semi() {
 				creatorE: localE,
 				startTime: gameTime(),
 				position: context.shootPart.Position,
-				velocity: context.shootPart.GetPivot().LookVector.mul(2),
+				velocity: context.shootPart.GetPivot().LookVector.mul(100),
 				acceleration: Vector3.zero,
 			});
 		}

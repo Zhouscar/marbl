@@ -1,11 +1,11 @@
 import React from "@rbxts/react";
-import { ProjectilesVisual } from "./projectiles-visuals";
+import { ProjectilesVisual } from "./projectiles-visual";
 import { ProjectilesHit } from "./projectiles-hit";
 
 export function Projectiles() {
 	return (
 		<>
-			<ProjectilesVisual />;
+			<ProjectilesVisual />
 			<ProjectilesHit />
 		</>
 	);
