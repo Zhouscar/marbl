@@ -92,7 +92,7 @@ And something unique about the game.
 
 - [x] Projectile spawn
 - [x] Projectile shoot
-- [ ] Projectile lifetime
+- [x] Projectile lifetime
 - [ ] Projectile hit
 
 - [ ] Melee spin

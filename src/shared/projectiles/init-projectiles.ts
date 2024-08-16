@@ -9,6 +9,7 @@ import {
 	Positioner,
 	ProjectileByCreator,
 	ProjectileByGadget,
+	ProjectileEndTime,
 	world,
 } from "shared/ecs";
 import { remotes } from "shared/remotes";
@@ -53,6 +54,7 @@ scheduleTick(() => {
 			const instance = projectileCache.GetPart(
 				CFrame.lookAlong(context.position, context.velocity),
 			);
+			print("hi");
 			instance.trail.Enabled = true;
 			world.set(e, CachedInstance, {
 				instance,
@@ -68,6 +70,7 @@ scheduleTick(() => {
 			world.add(e, pair(ProjectileByGadget, context.creatorGadgetE));
 		}
 
+		world.set(e, ProjectileEndTime, context.startTime + context.duration);
 		world.set(e, Positioner, {
 			startTime: context.startTime,
 			initialPosition: context.position,
@@ -76,7 +79,6 @@ scheduleTick(() => {
 		});
 		// TODO: pv, positioner effect, projectile type
 		// maybe also an IsProjectile component?
-		print("hi");
 		world.remove(e, InitProjectile);
 	}
 });

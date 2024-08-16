@@ -10,7 +10,10 @@ export const InitProjectile = world.component<{
 	position: Vector3;
 	velocity: Vector3;
 	acceleration: Vector3;
+	duration: number;
 }>();
+
+export const ProjectileEndTime = world.component<number>();
 
 export const ProjectileByGadget = world.component();
 world.add(ProjectileByGadget, ReplicatedPair);

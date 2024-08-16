@@ -31,6 +31,7 @@ export function Gadget_Gun_Semi() {
 				position: context.shootPart.Position,
 				velocity: context.shootPart.GetPivot().LookVector.mul(100),
 				acceleration: Vector3.zero,
+				duration: 1,
 			});
 		}
 	}, [localE, activated]);
