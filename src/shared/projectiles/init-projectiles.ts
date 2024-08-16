@@ -4,7 +4,7 @@ import ObjectCache from "@rbxts/object-cache";
 import { Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
 import {
 	CachedInstance,
-	ClientInitializedBy,
+	InitByThisClient,
 	InitProjectile,
 	Positioner,
 	ProjectileByCreator,
@@ -38,23 +38,14 @@ const projectileCache = new ObjectCache(
 
 scheduleTick(() => {
 	for (const [e, context] of world.query(InitProjectile)) {
-		if (RunService.IsClient() && context.player === Players.LocalPlayer) {
-			remotes.players.shootProjectile(context);
-		}
-
 		if (context.player !== undefined) {
 			context.creatorE = getPlayerE(context.player);
-		}
-
-		if (RunService.IsServer() && context.player !== undefined) {
-			world.set(e, ClientInitializedBy, context.player);
 		}
 
 		if (RunService.IsClient()) {
 			const instance = projectileCache.GetPart(
 				CFrame.lookAlong(context.position, context.velocity),
 			);
-			print("hi");
 			instance.trail.Enabled = true;
 			world.set(e, CachedInstance, {
 				instance,
@@ -77,6 +68,11 @@ scheduleTick(() => {
 			initialVelocity: context.velocity,
 			acceleration: context.acceleration,
 		});
+
+		if (RunService.IsClient() && context.player === Players.LocalPlayer) {
+			world.add(e, InitByThisClient);
+			remotes.players.shootProjectile(context);
+		}
 		// TODO: pv, positioner effect, projectile type
 		// maybe also an IsProjectile component?
 		world.remove(e, InitProjectile);

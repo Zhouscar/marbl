@@ -2,16 +2,9 @@ import { Component, Entity, pair, Wildcard } from "@rbxts/jecs";
 import Sift from "@rbxts/sift";
 import { makeMemos } from "shared/closures/make-memos";
 import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
-import {
-	ClientInitializedBy,
-	makeTrack,
-	PseudoComponent,
-	Replicated,
-	ReplicatedPair,
-	world,
-} from "shared/ecs";
+import { makeTrack, PseudoComponent, Replicated, ReplicatedPair, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
-import { ClientInitializedMap, ComponentDataContainer, ReplicationMap } from "shared/serdes";
+import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 import { scheduleTick } from "shared/utils/per-frame";
 
 const trackMemos = makeMemos();
@@ -39,7 +32,6 @@ function setSet(
 
 remotes.world.start.connect((player) => {
 	const worldPayload: ReplicationMap = new Map();
-	const clientInitializedMap: ClientInitializedMap = new Map();
 
 	for (const [component] of world.query(Replicated)) {
 		for (const [e, data] of world.query(component)) {
@@ -67,11 +59,7 @@ remotes.world.start.connect((player) => {
 		}
 	}
 
-	for (const [e, player] of world.query(ClientInitializedBy)) {
-		clientInitializedMap.set(tostring(e), player);
-	}
-
-	remotes.world.replicate.fire(player, worldPayload, clientInitializedMap);
+	remotes.world.replicate.fire(player, worldPayload);
 });
 
 scheduleTick(() => {
@@ -165,11 +153,6 @@ scheduleTick(() => {
 	}
 
 	if (!worldChanges.isEmpty()) {
-		const clientInitializedMap: ClientInitializedMap = new Map();
-		for (const [e, player] of world.query(ClientInitializedBy)) {
-			clientInitializedMap.set(tostring(e), player);
-		}
-
-		remotes.world.replicate.fireAll(worldChanges, clientInitializedMap);
+		remotes.world.replicate.fireAll(worldChanges);
 	}
 }, math.huge);

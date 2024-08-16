@@ -7,7 +7,7 @@ import {
 	createRemotes,
 } from "@rbxts/remo";
 import { SharedState } from "./store";
-import { ClientInitializedMap, ReplicationMap } from "./serdes";
+import { ReplicationMap } from "./serdes";
 import { EntityType } from "@rbxts/jecs";
 import { InitProjectile, Positioner } from "./ecs";
 
@@ -19,10 +19,7 @@ export const remotes = createRemotes({
 	}),
 
 	world: namespace({
-		replicate: remote<
-			ServerToClient,
-			[replicationMap: ReplicationMap, clientInitializedMap: ClientInitializedMap]
-		>(),
+		replicate: remote<ServerToClient, [replicationMap: ReplicationMap]>(),
 		start: remote<ClientToServer>(),
 	}),
 

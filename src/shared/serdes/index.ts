@@ -10,5 +10,3 @@ export type ComponentDataContainer = {
 	};
 };
 export type ReplicationMap = Map<string, Map<string, ComponentDataContainer>>;
-
-export type ClientInitializedMap = Map<string, Player>;

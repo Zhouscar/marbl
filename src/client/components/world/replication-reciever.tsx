@@ -3,7 +3,7 @@ import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React, { useCallback } from "@rbxts/react";
 import { Players } from "@rbxts/services";
 import { useWorldState } from "client/hooks/use-world-state";
-import { world } from "shared/ecs";
+import { InitByThisClient, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer } from "shared/serdes";
 
@@ -36,17 +36,17 @@ export function ReplicationReciever() {
 		[worldState],
 	);
 
-	useEventListener(remotes.world.replicate, (replicationMap, clientInitializedMap) => {
+	useEventListener(remotes.world.replicate, (replicationMap) => {
 		const eMap = worldState.eMap;
 		print(replicationMap);
 
 		replicationMap.forEach((componentMap, serverEStr) => {
-			if (clientInitializedMap.get(serverEStr) === Players.LocalPlayer) return;
-
 			const e = eMap.get(serverEStr);
 
+			if (e !== undefined && world.has(e, InitByThisClient)) return;
+
 			if (e !== undefined && next(componentMap) === undefined) {
-				world.delete(e);
+				world.clear(e);
 				eMap.delete(serverEStr);
 			}
 
