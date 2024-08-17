@@ -95,7 +95,7 @@ And something unique about the game.
 - [x] Projectile lifetime
 - [x] Projectile hit
 
-- [ ] Marbl health
+- [x] Marbl health
 
 - [ ] Projectile damage
 

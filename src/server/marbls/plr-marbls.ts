@@ -6,6 +6,7 @@ import { world } from "shared/world";
 remotes.players.spawn.connect((player) => {
 	const playerE = getPlayerE(player)!;
 	world.set(playerE, InitMarbl, {
+		health: 100,
 		player: player,
 		cf: new CFrame(0, 10, 0),
 		color: Color3.fromRGB(255, 0, 0),

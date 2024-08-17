@@ -1,23 +1,24 @@
-import { InitGadgets, InitMarbl, PV } from "shared/components";
+import { Health, InitGadgets, InitMarbl, PV } from "shared/components";
 import { getMarblPV } from "shared/marbls";
 import { scheduleTick } from "shared/utils/per-frame";
 import { world } from "shared/world";
 
 scheduleTick(() => {
-	for (const [e, context] of world.query(InitMarbl)) {
+	for (const [e, { material, color, player, health, cf, gadgets }] of world.query(InitMarbl)) {
 		const part = getMarblPV();
-		part.Color = context.color;
-		part.Material = context.material;
-		part.PivotTo(context.cf);
+		part.Color = color;
+		part.Material = material;
+		part.PivotTo(cf);
 
 		world.set(e, PV, part);
+		world.set(e, Health, health);
 
-		if (context.player !== undefined) {
-			part.SetNetworkOwner(context.player);
+		if (player !== undefined) {
+			part.SetNetworkOwner(player);
 		}
 
-		if (context.gadgets !== undefined && !context.gadgets.isEmpty()) {
-			world.set(e, InitGadgets, context.gadgets);
+		if (gadgets !== undefined && !gadgets.isEmpty()) {
+			world.set(e, InitGadgets, gadgets);
 		}
 
 		world.remove(e, InitMarbl);

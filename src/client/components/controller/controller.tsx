@@ -12,7 +12,7 @@ import { getCustomAngularVelocity, getCustomLinearVelocity } from "shared/utils/
 import { Workspace } from "@rbxts/services";
 import { Maybe } from "shared/utils/monads";
 import { useLocalE } from "client/hooks/use-local-e";
-import { PV } from "shared/components";
+import { Health, PV } from "shared/components";
 
 export interface ControllerDeviceProps {
 	pv?: PVInstance;
