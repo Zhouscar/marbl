@@ -1,5 +1,5 @@
 import ObjectCache from "@rbxts/object-cache";
-import { world } from "../world";
+import { world } from "../../world";
 import { Replicated } from "./network";
 
 export const PV = world.component<PVInstance>();

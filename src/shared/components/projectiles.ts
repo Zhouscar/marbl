@@ -1,5 +1,5 @@
 import { Entity } from "@rbxts/jecs";
-import { world } from "../world";
+import { world } from "../../world";
 import { Replicated, ReplicatedPair } from "./network";
 
 export const IsProjectile = world.component<undefined>();

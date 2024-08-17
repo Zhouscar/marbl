@@ -1,4 +1,4 @@
-import { world } from "../world";
+import { world } from "../../world";
 import { EntityType } from "@rbxts/jecs";
 import { InitGadgets } from "./gadgets";
 
