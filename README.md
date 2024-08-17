@@ -93,9 +93,17 @@ And something unique about the game.
 - [x] Projectile spawn
 - [x] Projectile shoot
 - [x] Projectile lifetime
-- [ ] Projectile hit
+- [x] Projectile hit
+
+- [ ] Marbl health
+
+- [ ] Projectile damage
+
+- [ ] Prevent memory leak like ServerPV, or ServerE
 
 - [ ] Melee spin
 - [ ] Melee stab
+
+- [ ] Marbl death
 
 - [ ] Enemy (AI, weapon)

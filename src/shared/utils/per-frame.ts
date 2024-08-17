@@ -1,4 +1,5 @@
 import { RunService } from "@rbxts/services";
+import { IS_CLIENT } from "shared/constants/core";
 
 export type PerFrameFunction = (dt: number) => void;
 
@@ -11,7 +12,7 @@ const physicsFunctions: { priority: number; fn: PerFrameFunction }[] = [];
 const tickFunctions: { priority: number; fn: PerFrameFunction }[] = [];
 
 export function scheduleRender(fn: PerFrameFunction, priority: number = 0) {
-	if (!RunService.IsClient()) {
+	if (!IS_CLIENT) {
 		warn("Only client can use RenderStepped");
 	}
 	renderFunctions.push({ priority: priority, fn: fn });
@@ -28,7 +29,7 @@ export function scheduleTick(fn: PerFrameFunction, priority: number = 0) {
 	table.sort(tickFunctions, (a, b) => a.priority < b.priority);
 }
 
-if (RunService.IsClient()) {
+if (IS_CLIENT) {
 	onRender.Connect((dt) => {
 		renderFunctions.forEach((context) => {
 			context.fn(dt);
@@ -36,7 +37,7 @@ if (RunService.IsClient()) {
 	});
 }
 
-onPhysics.Connect((dt) => {
+onPhysics.Connect((_, dt) => {
 	physicsFunctions.forEach((context) => {
 		context.fn(dt);
 	});

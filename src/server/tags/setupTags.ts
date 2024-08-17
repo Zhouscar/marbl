@@ -25,7 +25,7 @@ for (const [component, tagName] of world.query(Tagged)) {
 	CollectionService.GetInstanceRemovedSignal(tagName).Connect((instance) => {
 		const e = instance.GetAttribute(E_ATTRIBUTE) as Entity | undefined;
 		if (e !== undefined) {
-			world.clear(e);
+			world.delete(e);
 		}
 	});
 }

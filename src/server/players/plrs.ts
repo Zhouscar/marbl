@@ -4,6 +4,6 @@ import { getPlayerE, onPlayerAdded, promisePlayerDisconnected } from "shared/uti
 onPlayerAdded((player) => {
 	const e = getPlayerE(player)!;
 	promisePlayerDisconnected(player).andThen(() => {
-		world.clear(e);
+		world.delete(e);
 	});
 });

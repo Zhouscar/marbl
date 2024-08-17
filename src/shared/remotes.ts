@@ -8,8 +8,8 @@ import {
 } from "@rbxts/remo";
 import { SharedState } from "./store";
 import { ReplicationMap } from "./serdes";
-import { EntityType } from "@rbxts/jecs";
-import { InitProjectile, Positioner } from "./ecs";
+import { Entity, EntityType } from "@rbxts/jecs";
+import { InitProjectile, InitProjectileHit } from "./ecs";
 
 export const remotes = createRemotes({
 	store: namespace({
@@ -27,7 +27,12 @@ export const remotes = createRemotes({
 		spawn: remote<ClientToServer>(),
 		shootProjectile: remote<
 			ClientToServer,
-			[projectileContext: EntityType<typeof InitProjectile>]
+			[clientE: Entity, projectileContext: EntityType<typeof InitProjectile>]
+			// TODO: server needs to know which one the client is because the entity is created in the client therefore I cannot let client convert it to server but instead server convert into client, and it is better to be done with pairs for the optimization
+		>(),
+		projectileHit: remote<
+			ClientToServer,
+			[clientE: Entity, hitContext: EntityType<typeof InitProjectileHit>]
 		>(),
 	}),
 });

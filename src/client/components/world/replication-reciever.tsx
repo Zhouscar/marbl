@@ -1,9 +1,8 @@
 import { Entity, pair } from "@rbxts/jecs";
 import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React, { useCallback } from "@rbxts/react";
-import { Players } from "@rbxts/services";
 import { useWorldState } from "client/hooks/use-world-state";
-import { InitByThisClient, world } from "shared/ecs";
+import { AnotherHost, ServerE, world } from "shared/ecs";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer } from "shared/serdes";
 
@@ -26,8 +25,6 @@ export function ReplicationReciever() {
 					second = _second;
 				}
 
-				print(first, second);
-
 				return pair(first, second);
 			} else {
 				return tonumber(componentStr) as Entity;
@@ -38,21 +35,34 @@ export function ReplicationReciever() {
 
 	useEventListener(remotes.world.replicate, (replicationMap) => {
 		const eMap = worldState.eMap;
-		print(replicationMap);
+		// print(replicationMap);
 
 		replicationMap.forEach((componentMap, serverEStr) => {
 			const e = eMap.get(serverEStr);
 
-			if (e !== undefined && world.has(e, InitByThisClient)) return;
+			if (e !== undefined && !world.has(e, AnotherHost)) return;
 
 			if (e !== undefined && next(componentMap) === undefined) {
-				world.clear(e);
+				world.delete(e);
 				eMap.delete(serverEStr);
 			}
 
 			const componentsToInsert: Set<{ component: Entity } & ComponentDataContainer> =
 				new Set();
 			const componentsToRemove: Set<Entity> = new Set();
+
+			const serverE = tonumber(serverEStr) as Entity;
+
+			if (e === undefined || world.get(e, ServerE) !== serverE) {
+				componentsToInsert.add({
+					component: ServerE,
+					data: tonumber(serverEStr) as Entity,
+				});
+				componentsToInsert.add({
+					component: AnotherHost,
+					isTag: true,
+				});
+			}
 
 			componentMap.forEach((container, componentStr) => {
 				if (container.data !== undefined || container.isTag) {

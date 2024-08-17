@@ -9,6 +9,8 @@ export const CachedInstance = world.component<{
 	objectCache: ObjectCache<BasePart | Model>;
 }>();
 
+export const PremadeRaycastParams = world.component<RaycastParams>();
+
 export const ServerPV = world.component<undefined>();
 world.add(ServerPV, Replicated);
 

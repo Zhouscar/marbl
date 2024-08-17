@@ -13,7 +13,6 @@ scheduleTick(() => {
 			if (prevCachedInstance === undefined) continue;
 			const trail = prevCachedInstance.instance.FindFirstChildWhichIsA("Trail");
 			if (trail) {
-				print("hi");
 				trail.Enabled = false;
 			}
 

@@ -1,5 +1,6 @@
-import { RunService, Workspace } from "@rbxts/services";
+import { Workspace } from "@rbxts/services";
 import { makeListen } from "shared/closures/make-listen";
+import { IS_CLIENT } from "shared/constants/core";
 import { makeTrack, PV, ServerPV, world } from "shared/ecs";
 import { scheduleTick } from "shared/utils/per-frame";
 
@@ -10,8 +11,8 @@ scheduleTick(() => {
 	for (const [e, pv] of world.query(PV)) {
 		listen(pv, pv.AncestryChanged, () => {
 			if (pv.IsDescendantOf(Workspace)) return;
-			if (RunService.IsClient() && world.has(e, ServerPV)) return;
-			world.clear(e);
+			if (IS_CLIENT && world.has(e, ServerPV)) return;
+			world.delete(e);
 		});
 	}
 

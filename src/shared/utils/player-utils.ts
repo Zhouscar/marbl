@@ -1,4 +1,5 @@
 import { Players, RunService } from "@rbxts/services";
+import { IS_SERVER } from "shared/constants/core";
 import { Plr, world } from "shared/ecs";
 
 // const characterSchema = {
@@ -27,7 +28,7 @@ export function getPlayerE(player: Player) {
 		return e;
 	}
 
-	if (RunService.IsServer()) {
+	if (IS_SERVER) {
 		const e = world.entity();
 		world.set(e, Plr, player);
 		return e;
