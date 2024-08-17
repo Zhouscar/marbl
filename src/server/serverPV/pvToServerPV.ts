@@ -1,6 +1,8 @@
 import { CollectionService } from "@rbxts/services";
-import { makeTrack, PV, ServerPV, world } from "shared/ecs";
-import { onTick, scheduleTick } from "shared/utils/per-frame";
+import { makeTrack } from "shared/closures/make-track";
+import { PV, ServerPV } from "shared/components";
+import { scheduleTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 const trackPV = makeTrack(PV);
 

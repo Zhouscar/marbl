@@ -1,4 +1,4 @@
-import { world } from "../../world";
+import { world } from "shared/world";
 
 export const Tagged = world.component<string>();
 

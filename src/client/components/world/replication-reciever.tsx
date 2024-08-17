@@ -2,9 +2,10 @@ import { Entity, pair } from "@rbxts/jecs";
 import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React, { useCallback } from "@rbxts/react";
 import { useWorldState } from "client/hooks/use-world-state";
-import { AnotherHost, ServerE, world } from "shared/ecs";
+import { AnotherHost, ServerE } from "shared/components";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer } from "shared/serdes";
+import { world } from "shared/world";
 
 export function ReplicationReciever() {
 	const worldState = useWorldState();

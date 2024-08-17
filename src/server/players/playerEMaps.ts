@@ -1,6 +1,7 @@
 import { Entity } from "@rbxts/jecs";
-import { HasClientE, world } from "shared/ecs";
+import { HasClientE } from "shared/components";
 import { onTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 const playersEMap: Map<Player, Map<string, Entity>> = new Map();
 

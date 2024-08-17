@@ -4,10 +4,11 @@ import { Players } from "@rbxts/services";
 import { useLocalE } from "client/hooks/use-local-e";
 import { useStated } from "client/hooks/use-stated";
 import { useWorldState } from "client/hooks/use-world-state";
+import { GadgetOf, GadgetVariantAs, GunOfGadget, InitProjectile } from "shared/components";
 import { LAST_E } from "shared/constants/core";
-import { GadgetOf, GadgetVariantAs, GunOfGadget, InitProjectile, world } from "shared/ecs";
 import { GadgetVariantIdEs } from "shared/gadgets";
 import { gameTime } from "shared/utils/time-utils";
+import { world } from "shared/world";
 
 export function Gadget_Gun_Semi() {
 	const localE = useLocalE();

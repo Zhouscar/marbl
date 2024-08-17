@@ -1,7 +1,8 @@
 import { Entity } from "@rbxts/jecs";
 import { CollectionService } from "@rbxts/services";
+import { PV, Tagged } from "shared/components";
 import { E_ATTRIBUTE } from "shared/constants/core";
-import { PV, Tagged, world } from "shared/ecs";
+import { world } from "shared/world";
 
 function spawnBound(instance: PVInstance, component: Entity) {
 	const e = world.entity();

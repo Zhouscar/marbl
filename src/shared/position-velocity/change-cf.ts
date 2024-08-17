@@ -1,5 +1,6 @@
-import { ChangeCF, PV, world } from "shared/ecs";
+import { ChangeCF, PV } from "shared/components";
 import { scheduleTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 scheduleTick(() => {
 	for (const [e, pv, cf] of world.query(PV, ChangeCF)) {

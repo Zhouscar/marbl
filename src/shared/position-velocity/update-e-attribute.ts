@@ -1,8 +1,6 @@
-import { Make } from "@rbxts/altmake";
-import { Workspace } from "@rbxts/services";
-import { makeThrottle } from "shared/closures/make-throttle";
+import { makeTrack } from "shared/closures/make-track";
+import { PV } from "shared/components";
 import { E_ATTRIBUTE } from "shared/constants/core";
-import { makeTrack, PV, world } from "shared/ecs";
 import { scheduleTick } from "shared/utils/per-frame";
 
 const trackPV = makeTrack(PV);

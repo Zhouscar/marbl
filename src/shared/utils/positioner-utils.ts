@@ -1,6 +1,6 @@
 import { EntityType } from "@rbxts/jecs";
-import { Positioner } from "shared/ecs";
 import { gameTime } from "./time-utils";
+import { Positioner } from "shared/components";
 
 export function getPositionerCurrent(positioner: EntityType<typeof Positioner>) {
 	const timePassed = gameTime() - positioner.startTime;

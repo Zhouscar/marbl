@@ -3,8 +3,9 @@ import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React from "@rbxts/react";
 import { CollectionService } from "@rbxts/services";
 import { useWorldState } from "client/hooks/use-world-state";
+import { PV } from "shared/components";
 import { E_ATTRIBUTE } from "shared/constants/core";
-import { PV, world } from "shared/ecs";
+import { world } from "shared/world";
 
 export function ServerPVToPV() {
 	const worldState = useWorldState();

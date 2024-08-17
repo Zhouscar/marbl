@@ -1,4 +1,5 @@
-import { CachedInstance, makeTrack } from "shared/ecs";
+import { makeTrack } from "shared/closures/make-track";
+import { CachedInstance } from "shared/components";
 import { scheduleTick } from "shared/utils/per-frame";
 
 const track = makeTrack(CachedInstance);

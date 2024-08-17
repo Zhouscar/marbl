@@ -5,10 +5,11 @@ import { useMotion } from "client/hooks/ripple";
 import { useComponent } from "client/hooks/use-component";
 import { useLocalE } from "client/hooks/use-local-e";
 import { useWorldState } from "client/hooks/use-world-state";
-import { GadgetOf, GadgetRotationOffset, PV, world } from "shared/ecs";
+import { GadgetOf, GadgetRotationOffset, PV } from "shared/components";
 import { Maybe } from "shared/utils/monads";
 import { onTick } from "shared/utils/per-frame";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
+import { world } from "shared/world";
 
 export function GadgetsPointAt() {
 	const localE = useLocalE();

@@ -1,8 +1,9 @@
 import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React from "@rbxts/react";
-import { CachedInstance, Positioner, world } from "shared/ecs";
+import { CachedInstance, Positioner } from "shared/components";
 import { onTick } from "shared/utils/per-frame";
 import { getPositionerCurrent } from "shared/utils/positioner-utils";
+import { world } from "shared/world";
 
 export function ProjectilesVisual() {
 	useEventListener(onTick, () => {

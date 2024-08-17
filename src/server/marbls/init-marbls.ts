@@ -1,6 +1,7 @@
-import { InitGadgets, InitMarbl, PV, world } from "shared/ecs";
+import { InitGadgets, InitMarbl, PV } from "shared/components";
 import { getMarblPV } from "shared/marbls";
 import { scheduleTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 scheduleTick(() => {
 	for (const [e, context] of world.query(InitMarbl)) {

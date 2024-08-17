@@ -1,8 +1,10 @@
 import { Workspace } from "@rbxts/services";
 import { makeListen } from "shared/closures/make-listen";
+import { makeTrack } from "shared/closures/make-track";
+import { PV, ServerPV } from "shared/components";
 import { IS_CLIENT } from "shared/constants/core";
-import { makeTrack, PV, ServerPV, world } from "shared/ecs";
 import { scheduleTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 const listen = makeListen();
 const trackRenderable = makeTrack(PV);

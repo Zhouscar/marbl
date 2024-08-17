@@ -1,6 +1,7 @@
 import { Players, RunService } from "@rbxts/services";
+import { Plr } from "shared/components";
 import { IS_SERVER } from "shared/constants/core";
-import { Plr, world } from "shared/ecs";
+import { world } from "shared/world";
 
 // const characterSchema = {
 // 	$className: "Model",

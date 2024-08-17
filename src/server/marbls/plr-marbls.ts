@@ -1,6 +1,7 @@
-import { InitMarbl, world } from "shared/ecs";
+import { InitMarbl } from "shared/components";
 import { remotes } from "shared/remotes";
 import { getPlayerE } from "shared/utils/player-utils";
+import { world } from "shared/world";
 
 remotes.players.spawn.connect((player) => {
 	const playerE = getPlayerE(player)!;

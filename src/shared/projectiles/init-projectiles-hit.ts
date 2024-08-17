@@ -1,5 +1,4 @@
 import { pair } from "@rbxts/jecs";
-import { IS_CLIENT } from "shared/constants/core";
 import {
 	AnotherHost,
 	CachedInstance,
@@ -8,12 +7,13 @@ import {
 	ProjectileEndTime,
 	ProjectileHitBy,
 	ProjectileHitCF,
-	world,
-} from "shared/ecs";
+} from "shared/components";
+import { IS_CLIENT } from "shared/constants/core";
 import { remotes } from "shared/remotes";
 import { scheduleTick } from "shared/utils/per-frame";
 import { getServerEFromClient } from "shared/utils/server-entity";
 import { gameTime } from "shared/utils/time-utils";
+import { world } from "shared/world";
 
 scheduleTick(() => {
 	for (const [e, context] of world.query(InitProjectileHit)) {

@@ -1,6 +1,6 @@
-import { world } from "../../world";
 import { EntityType } from "@rbxts/jecs";
 import { InitGadgets } from "./gadgets";
+import { world } from "shared/world";
 
 export const Living = world.component<undefined>();
 

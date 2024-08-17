@@ -1,10 +1,11 @@
-import { GadgetVariantAs, GunOfGadget, MeleeOfGadget, PV, world } from "shared/ecs";
 import { scheduleTick } from "shared/utils/per-frame";
 import { Gadgets, GadgetVariant, GadgetVariantIdEs } from "./gadgets";
 import { findPath, waitForPath } from "shared/utils/indexing-utils";
 import { CASTER_ATTACHMENT_NAME, IS_SERVER } from "shared/constants/core";
 import { ReplicatedStorage } from "@rbxts/services";
 import { EntityType, pair } from "@rbxts/jecs";
+import { GadgetVariantAs, GunOfGadget, MeleeOfGadget, PV } from "shared/components";
+import { world } from "shared/world";
 
 const gadgetsFolder = waitForPath(ReplicatedStorage, "assets/models/gadgets", "Folder");
 

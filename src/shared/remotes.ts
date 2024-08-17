@@ -9,7 +9,7 @@ import {
 import { SharedState } from "./store";
 import { ReplicationMap } from "./serdes";
 import { Entity, EntityType } from "@rbxts/jecs";
-import { InitProjectile, InitProjectileHit } from "./ecs";
+import { InitProjectile, InitProjectileHit } from "./components";
 
 export const remotes = createRemotes({
 	store: namespace({

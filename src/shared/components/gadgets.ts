@@ -1,6 +1,6 @@
 import { GadgetName } from "shared/gadgets";
-import { world } from "../../world";
 import { Replicated, ReplicatedPair } from "./network";
+import { world } from "shared/world";
 
 export const InitGadgets = world.component<
 	{

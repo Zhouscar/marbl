@@ -1,6 +1,7 @@
 import { entityWithClientE } from "server/players/playerEMaps";
-import { InitProjectile, InitProjectileHit, world } from "shared/ecs";
+import { InitProjectile, InitProjectileHit } from "shared/components";
 import { remotes } from "shared/remotes";
+import { world } from "shared/world";
 
 remotes.players.shootProjectile.connect((player, clientE, projectileContext) => {
 	projectileContext.player = player;

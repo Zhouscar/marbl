@@ -1,8 +1,8 @@
 import { Entity } from "@rbxts/jecs";
 import { useLatest } from "@rbxts/pretty-react-hooks";
 import { useEffect, useState } from "@rbxts/react";
-import { world } from "shared/ecs";
 import { onTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 export function useComponent<T>(e: Entity, component: Entity<T>) {
 	const [data, setData] = useState(() => world.get(e, component));

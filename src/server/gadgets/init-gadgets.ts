@@ -7,11 +7,11 @@ import {
 	InitGadgets,
 	Plr,
 	PV,
-	world,
-} from "shared/ecs";
+} from "shared/components";
 import { GadgetNameIdEs, Gadgets, GadgetVariantIdEs, getGadgetPV } from "shared/gadgets";
 import { scheduleTick } from "shared/utils/per-frame";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
+import { world } from "shared/world";
 
 scheduleTick(() => {
 	for (const [e, gadgets] of world.query(InitGadgets)) {

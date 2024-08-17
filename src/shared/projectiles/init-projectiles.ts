@@ -2,10 +2,9 @@ import { Make } from "@rbxts/altmake";
 import { pair } from "@rbxts/jecs";
 import ObjectCache from "@rbxts/object-cache";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
-import { IS_CLIENT, IS_SERVER } from "shared/constants/core";
 import {
-	CachedInstance,
 	AnotherHost,
+	CachedInstance,
 	InitProjectile,
 	IsProjectile,
 	Positioner,
@@ -13,13 +12,14 @@ import {
 	ProjectileByCreator,
 	ProjectileByGadget,
 	ProjectileEndTime,
-	world,
-} from "shared/ecs";
+} from "shared/components";
+import { IS_CLIENT, IS_SERVER } from "shared/constants/core";
 import { remotes } from "shared/remotes";
 import { waitForPath } from "shared/utils/indexing-utils";
 import { scheduleTick } from "shared/utils/per-frame";
 import { getPlayerE } from "shared/utils/player-utils";
 import { getServerEFromClient } from "shared/utils/server-entity";
+import { world } from "shared/world";
 
 const projectileAsset = waitForPath(
 	ReplicatedStorage,

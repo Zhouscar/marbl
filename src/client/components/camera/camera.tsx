@@ -5,7 +5,7 @@ import { useComponent } from "client/hooks/use-component";
 import { useLocalE } from "client/hooks/use-local-e";
 import { useSpringed } from "client/hooks/use-springed";
 import { useWorldState } from "client/hooks/use-world-state";
-import { PV } from "shared/ecs";
+import { PV } from "shared/components";
 import { onRender } from "shared/utils/per-frame";
 
 export function Camera() {

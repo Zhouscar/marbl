@@ -1,11 +1,13 @@
 import { Component, Entity, pair, Wildcard } from "@rbxts/jecs";
 import Sift from "@rbxts/sift";
 import { makeMemos } from "shared/closures/make-memos";
+import { makeTrack } from "shared/closures/make-track";
 import { makeTrackPairWildCard } from "shared/closures/make-track-pair-wildcard";
-import { makeTrack, PseudoComponent, Replicated, ReplicatedPair, world } from "shared/ecs";
+import { PseudoComponent, Replicated, ReplicatedPair } from "shared/components";
 import { remotes } from "shared/remotes";
 import { ComponentDataContainer, ReplicationMap } from "shared/serdes";
 import { scheduleTick } from "shared/utils/per-frame";
+import { world } from "shared/world";
 
 const trackMemos = makeMemos();
 const trackPairWildCardMemos = makeMemos();

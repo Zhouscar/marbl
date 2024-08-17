@@ -5,10 +5,11 @@ import {
 	IsProjectile,
 	Positioner,
 	PremadeRaycastParams,
-	world,
-} from "shared/ecs";
+} from "shared/components";
+
 import { scheduleTick } from "shared/utils/per-frame";
 import { getPositionerCurrent } from "shared/utils/positioner-utils";
+import { world } from "shared/world";
 
 scheduleTick((dt) => {
 	for (const [e, positioner, params] of world

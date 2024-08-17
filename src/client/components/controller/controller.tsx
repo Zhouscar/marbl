@@ -5,7 +5,6 @@ import { ComputerController } from "./controllers/computer";
 import { MobileController } from "./controllers/mobile";
 import { GamepadController } from "./controllers/gamepad";
 import { useComponent } from "client/hooks/use-component";
-import { PV } from "shared/ecs";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
 import { useWorldState } from "client/hooks/use-world-state";
 import { onPhysics, onTick } from "shared/utils/per-frame";
@@ -13,6 +12,7 @@ import { getCustomAngularVelocity, getCustomLinearVelocity } from "shared/utils/
 import { Workspace } from "@rbxts/services";
 import { Maybe } from "shared/utils/monads";
 import { useLocalE } from "client/hooks/use-local-e";
+import { PV } from "shared/components";
 
 export interface ControllerDeviceProps {
 	pv?: PVInstance;
