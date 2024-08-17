@@ -1,6 +1,6 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local world = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "ecs", "world").world
-local PseudoComponent = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "ecs").PseudoComponent
+local world = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "world").world
+local PseudoComponent = TS.import(script, game:GetService("ReplicatedStorage"), "shared", "components").PseudoComponent
 
 local function makeIdentifierEntities(map)
 	local identifierEntities = {}
