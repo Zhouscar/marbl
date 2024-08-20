@@ -11,13 +11,14 @@ import {
 	PremadeRaycastParams,
 	ProjectileByCreator,
 	ProjectileByGadget,
+	ProjectileDamageWhenHit,
 	ProjectileEndTime,
 } from "shared/components";
 import { IS_CLIENT, IS_SERVER } from "shared/constants/core";
 import { remotes } from "shared/remotes";
 import { waitForPath } from "shared/utils/indexing-utils";
 import { scheduleTick } from "shared/utils/per-frame";
-import { getPlayerE } from "shared/utils/player-utils";
+import { getPlrE } from "shared/utils/player-utils";
 import { getServerEFromClient } from "shared/utils/server-entity";
 import { world } from "shared/world";
 
@@ -45,7 +46,7 @@ scheduleTick(() => {
 		world.add(e, IsProjectile);
 
 		if (context.player !== undefined) {
-			context.creatorE = getPlayerE(context.player);
+			context.creatorE = getPlrE(context.player);
 		}
 
 		const raycastParams = new RaycastParams();
@@ -75,6 +76,10 @@ scheduleTick(() => {
 
 		if (context.creatorGadgetE !== undefined) {
 			world.add(e, pair(ProjectileByGadget, context.creatorGadgetE));
+		}
+
+		if (context.damage !== undefined) {
+			world.set(e, ProjectileDamageWhenHit, { amount: 10 });
 		}
 
 		world.set(e, ProjectileEndTime, context.startTime + context.duration);

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "@rbxts/react";
 import { config } from "@rbxts/ripple";
 import { useMotion } from "client/hooks/ripple";
 import { useComponent } from "client/hooks/use-component";
-import { useLocalE } from "client/hooks/use-local-e";
+import { useLocalCharE } from "client/hooks/use-local-char-e";
 import { useWorldState } from "client/hooks/use-world-state";
 import { GadgetOf, GadgetRotationOffset, PV } from "shared/components";
 import { Maybe } from "shared/utils/monads";
@@ -12,8 +12,8 @@ import { getPvPrimaryPart } from "shared/utils/pv-utils";
 import { world } from "shared/world";
 
 export function GadgetsPointAt() {
-	const localE = useLocalE();
-	const pv = useComponent(localE, PV);
+	const localCharE = useLocalCharE();
+	const pv = useComponent(localCharE, PV);
 	const part = useMemo(() => new Maybe(pv).bind(getPvPrimaryPart).get(), [pv]);
 
 	const worldState = useWorldState();
@@ -30,7 +30,7 @@ export function GadgetsPointAt() {
 			for (const [e, gadgetPV, offset] of world.query(
 				PV,
 				GadgetRotationOffset,
-				pair(GadgetOf, localE),
+				pair(GadgetOf, localCharE),
 			)) {
 				const gadgetPart = getPvPrimaryPart(gadgetPV);
 				if (gadgetPart) {

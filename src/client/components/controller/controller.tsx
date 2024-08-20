@@ -11,8 +11,8 @@ import { onPhysics, onTick } from "shared/utils/per-frame";
 import { getCustomAngularVelocity, getCustomLinearVelocity } from "shared/utils/memo-forces";
 import { Workspace } from "@rbxts/services";
 import { Maybe } from "shared/utils/monads";
-import { useLocalE } from "client/hooks/use-local-e";
-import { Health, PV } from "shared/components";
+import { PV } from "shared/components";
+import { useLocalCharE } from "client/hooks/use-local-char-e";
 
 export interface ControllerDeviceProps {
 	pv?: PVInstance;
@@ -27,8 +27,8 @@ export interface ControllerDeviceProps {
 export function Controller() {
 	const device = useDevice();
 
-	const localE = useLocalE();
-	const pv = useComponent(localE, PV);
+	const localCharE = useLocalCharE();
+	const pv = useComponent(localCharE, PV);
 	const part = useMemo(() => new Maybe(pv).bind(getPvPrimaryPart).get(), [pv]);
 
 	const camera = useCamera();

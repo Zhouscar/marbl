@@ -1,5 +1,5 @@
 import ObjectCache from "@rbxts/object-cache";
-import { Replicated } from "./network";
+import { Replicated, ReplicatedPair } from "./network";
 import { world } from "shared/world";
 
 export const PV = world.component<PVInstance>();
@@ -18,3 +18,6 @@ export const ChangeCF = world.component<CFrame>();
 
 export const Plr = world.component<Player>();
 world.add(Plr, Replicated);
+
+export const PlrOf = world.component();
+world.add(PlrOf, ReplicatedPair);

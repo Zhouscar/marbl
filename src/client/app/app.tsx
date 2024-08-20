@@ -5,7 +5,6 @@ import { Gadgets } from "client/components/gadgets";
 import { Projectiles } from "client/components/projectiles";
 import { World } from "client/components/world";
 
-print("hi");
 export function App() {
 	return (
 		<>

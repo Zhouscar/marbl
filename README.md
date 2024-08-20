@@ -60,6 +60,7 @@ Some things I'm looking forward projectile system are these things:
 - player initiated projectiles
 - client sided projectile movement
 
+
 I'm thinking since a projectile has a very straightforward path (excluding tracked projectiles)
 I can make them strictly based on positioners
 
@@ -96,8 +97,7 @@ And something unique about the game.
 - [x] Projectile hit
 
 - [x] Marbl health
-
-- [ ] Projectile damage
+- [x] Projectile damage
 
 - [ ] Prevent memory leak like ServerPV, or ServerE
 

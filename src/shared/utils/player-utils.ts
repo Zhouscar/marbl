@@ -1,5 +1,6 @@
+import { Entity, pair } from "@rbxts/jecs";
 import { Players, RunService } from "@rbxts/services";
-import { Plr } from "shared/components";
+import { Plr, PlrOf } from "shared/components";
 import { IS_SERVER } from "shared/constants/core";
 import { world } from "shared/world";
 
@@ -23,7 +24,7 @@ import { world } from "shared/world";
 // 	return promiseTree(character, characterSchema).timeout(30, "Character timed out");
 // }
 
-export function getPlayerE(player: Player) {
+export function getPlrE(player: Player) {
 	for (const [e, _player] of world.query(Plr)) {
 		if (_player !== player) continue;
 		return e;
@@ -32,6 +33,12 @@ export function getPlayerE(player: Player) {
 	if (IS_SERVER) {
 		const e = world.entity();
 		world.set(e, Plr, player);
+		return e;
+	}
+}
+
+export function getCharE(plrE: Entity) {
+	for (const [e] of world.query(pair(PlrOf, plrE))) {
 		return e;
 	}
 }

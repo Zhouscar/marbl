@@ -6,6 +6,7 @@ import {
 	Positioner,
 	PremadeRaycastParams,
 } from "shared/components";
+import { getEFromPart } from "shared/position-velocity/part-to-e";
 
 import { scheduleTick } from "shared/utils/per-frame";
 import { getPositionerCurrent } from "shared/utils/positioner-utils";
@@ -16,12 +17,20 @@ scheduleTick((dt) => {
 		.query(Positioner, PremadeRaycastParams, IsProjectile)
 		.without(AnotherHost, InitProjectileHit)) {
 		const { currentPosition, currentVelocity } = getPositionerCurrent(positioner);
-		const result = Workspace.Raycast(currentPosition, currentVelocity.mul(dt), params);
+		const stepVector = currentVelocity.mul(dt);
+		const result = Workspace.Raycast(
+			currentPosition.sub(stepVector.div(2)),
+			stepVector,
+			params,
+		);
 		if (result === undefined) continue;
+
+		const hitByE = !result.Instance.IsA("BasePart") ? undefined : getEFromPart(result.Instance);
 
 		world.set(e, InitProjectileHit, {
 			position: currentPosition,
 			direction: currentVelocity,
+			hitByE,
 		});
 	}
 });

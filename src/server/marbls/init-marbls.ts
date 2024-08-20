@@ -1,6 +1,8 @@
-import { Health, InitGadgets, InitMarbl, PV } from "shared/components";
+import { pair } from "@rbxts/jecs";
+import { Health, InitGadgets, InitMarbl, PlrOf, PV } from "shared/components";
 import { getMarblPV } from "shared/marbls";
 import { scheduleTick } from "shared/utils/per-frame";
+import { getPlrE } from "shared/utils/player-utils";
 import { world } from "shared/world";
 
 scheduleTick(() => {
@@ -14,6 +16,7 @@ scheduleTick(() => {
 		world.set(e, Health, health);
 
 		if (player !== undefined) {
+			world.add(e, pair(PlrOf, getPlrE(player)!));
 			part.SetNetworkOwner(player);
 		}
 

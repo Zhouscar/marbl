@@ -2,13 +2,14 @@ import { pair } from "@rbxts/jecs";
 import {
 	AnotherHost,
 	CachedInstance,
+	InitDamage,
 	InitProjectileHit,
 	Positioner,
+	ProjectileDamageWhenHit,
 	ProjectileEndTime,
-	ProjectileHitBy,
 	ProjectileHitCF,
 } from "shared/components";
-import { IS_CLIENT } from "shared/constants/core";
+import { IS_CLIENT, IS_SERVER } from "shared/constants/core";
 import { remotes } from "shared/remotes";
 import { scheduleTick } from "shared/utils/per-frame";
 import { getServerEFromClient } from "shared/utils/server-entity";
@@ -28,11 +29,17 @@ scheduleTick(() => {
 			});
 		}
 
-		if (context.hitByE !== undefined) {
-			world.add(e, pair(ProjectileHitBy, context.hitByE));
+		const damageConfig = world.get(e, ProjectileDamageWhenHit);
+
+		if (IS_SERVER && context.hitByE !== undefined && damageConfig !== undefined) {
+			world.set(world.entity(), InitDamage, {
+				...damageConfig,
+				fromE: e,
+				toE: context.hitByE,
+				// time: gameTime(),
+			});
 		}
 
-		print("hit");
 		world.set(e, ProjectileHitCF, CFrame.lookAlong(context.position, context.direction));
 
 		world.remove(e, InitProjectileHit);

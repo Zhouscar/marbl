@@ -2,7 +2,7 @@ import { useCamera } from "@rbxts/pretty-react-hooks";
 import React, { useEffect, useMemo } from "@rbxts/react";
 import { Workspace } from "@rbxts/services";
 import { useComponent } from "client/hooks/use-component";
-import { useLocalE } from "client/hooks/use-local-e";
+import { useLocalCharE } from "client/hooks/use-local-char-e";
 import { useSpringed } from "client/hooks/use-springed";
 import { useWorldState } from "client/hooks/use-world-state";
 import { PV } from "shared/components";
@@ -10,8 +10,8 @@ import { onRender } from "shared/utils/per-frame";
 
 export function Camera() {
 	const camera = useCamera();
-	const localE = useLocalE();
-	const pv = useComponent(localE, PV);
+	const localCharE = useLocalCharE();
+	const pv = useComponent(localCharE, PV);
 	const worldState = useWorldState();
 
 	const raycastParams = useMemo(() => {
