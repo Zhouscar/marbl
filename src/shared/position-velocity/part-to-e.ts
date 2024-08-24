@@ -46,7 +46,7 @@ function forEachRemovedPV(pv: PVInstance) {
 		});
 }
 
-onTick.Connect(() => {
+onTick(() => {
 	trackPV((changes) => {
 		for (const [e, pv] of changes.added()) {
 			forEachAddedPV(e, pv);

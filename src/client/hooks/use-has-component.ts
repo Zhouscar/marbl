@@ -9,16 +9,14 @@ export function useHasComponent<T>(e: Entity, component: Entity<T>) {
 	const lastestExist = useLatest(exist);
 
 	useEffect(() => {
-		const connection = onTick.Connect(() => {
+		const disconnect = onTick(() => {
 			const newExist = world.has(e, component);
 			if (newExist === lastestExist.current) return;
 
 			setExist(newExist);
 		});
 
-		return () => {
-			connection.Disconnect();
-		};
+		return disconnect;
 	}, [e]);
 
 	return exist;

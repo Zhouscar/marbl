@@ -17,7 +17,7 @@ world.set(e, InitMarbl, {
 
 const track = makeTrack(Health);
 
-onTick.Connect(() => {
+onTick(() => {
 	track((changes) => {
 		for (const [e, health] of changes.changed()) {
 			print(health);

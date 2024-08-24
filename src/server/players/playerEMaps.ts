@@ -5,7 +5,7 @@ import { world } from "shared/world";
 
 const playersEMap: Map<Player, Map<string, Entity>> = new Map();
 
-onTick.Connect(() => {
+onTick(() => {
 	playersEMap.forEach((map) => {
 		map.forEach((serverE, key) => {
 			if (!world.has(serverE, HasClientE)) {

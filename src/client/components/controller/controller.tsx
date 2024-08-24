@@ -63,6 +63,14 @@ export function Controller() {
 			MaxTorque: 1000,
 		});
 
+		getCustomLinearVelocity(part, "LinearFriction", {
+			RelativeTo: Enum.ActuatorRelativeTo.World,
+			ForceLimitsEnabled: true,
+			ForceLimitMode: Enum.ForceLimitMode.PerAxis,
+			MaxAxesForce: new Vector3(1000, 1000, 1000),
+			VectorVelocity: Vector3.zero,
+		});
+
 		getCustomLinearVelocity(part, "Movement", {
 			RelativeTo: Enum.ActuatorRelativeTo.World,
 			ForceLimitsEnabled: true,
@@ -70,7 +78,7 @@ export function Controller() {
 			MaxAxesForce: new Vector3(5000, 0, 5000),
 		});
 
-		const physicsConnection = onPhysics.Connect(() => {
+		const disconnect = onPhysics(() => {
 			const newGrounded =
 				Workspace.Raycast(
 					part.GetPivot().Position,
@@ -83,9 +91,7 @@ export function Controller() {
 			}
 		});
 
-		return () => {
-			physicsConnection.Disconnect();
-		};
+		return disconnect;
 	}, [part]);
 
 	useEffect(() => {
@@ -100,7 +106,7 @@ export function Controller() {
 			return;
 		}
 
-		const tickConnection = onTick.Connect(() => {
+		const disconnect = onTick(() => {
 			let velocity = camera.CFrame.LookVector.mul(inputDirection.Y).add(
 				camera.CFrame.RightVector.mul(inputDirection.X),
 			);
@@ -109,19 +115,12 @@ export function Controller() {
 			movement.VectorVelocity = velocity;
 		});
 
-		return () => {
-			tickConnection.Disconnect();
-		};
+		return disconnect;
 	}, [part, inputDirection]);
 
-	const move = useCallback(
-		(direction: Vector2) => {
-			if (part === undefined) return;
-
-			setInputDirection(direction);
-		},
-		[part],
-	);
+	const move = useCallback((direction: Vector2) => {
+		setInputDirection(direction);
+	}, []);
 
 	const jump = useCallback(() => {
 		if (part === undefined || !grounded) return;
@@ -129,52 +128,36 @@ export function Controller() {
 		part.ApplyImpulse(new Vector3(0, 2000, 0));
 	}, [part, grounded]);
 
-	const rotate = useCallback(
-		(rotateX: number, rotateY: number) => {
-			if (part === undefined) return;
-			worldState.rotationX += rotateX;
-			worldState.rotationY += rotateY;
-			worldState.rotationX = math.clamp(
-				worldState.rotationX,
-				-(math.pi - 0.5) / 2,
-				(math.pi - 0.5) / 2,
-			);
-		},
-		[part],
-	);
+	const rotate = useCallback((rotateX: number, rotateY: number) => {
+		worldState.rotationX += rotateX;
+		worldState.rotationY += rotateY;
+		worldState.rotationX = math.clamp(
+			worldState.rotationX,
+			-(math.pi - 0.5) / 2,
+			(math.pi - 0.5) / 2,
+		);
+	}, []);
 
-	const zoom = useCallback(
-		(delta: number) => {
-			if (part === undefined) return;
-			worldState.cameraDistance += delta;
-			worldState.cameraDistance = math.clamp(worldState.cameraDistance, 10, 50);
-		},
-		[part],
-	);
+	const zoom = useCallback((delta: number) => {
+		worldState.cameraDistance += delta;
+		worldState.cameraDistance = math.clamp(worldState.cameraDistance, 10, 50);
+	}, []);
 
-	const point = useCallback(
-		(position: Vector3) => {
-			if (part === undefined) return;
-			worldState.pointAt = position;
-		},
-		[part],
-	);
+	const point = useCallback((position: Vector3) => {
+		worldState.pointAt = position;
+	}, []);
 
-	const activate = useCallback(
-		(activated: boolean) => {
-			if (part === undefined) return;
-			if (activated) {
-				worldState.activated = true;
-			} else {
-				task.spawn(() => {
-					task.wait();
-					task.wait();
-					worldState.activated = false;
-				});
-			}
-		},
-		[part],
-	);
+	const activate = useCallback((activated: boolean) => {
+		if (activated) {
+			worldState.activated = true;
+		} else {
+			task.spawn(() => {
+				task.wait();
+				task.wait();
+				worldState.activated = false;
+			});
+		}
+	}, []);
 
 	return (
 		<>

@@ -3,8 +3,8 @@ import { ControllerDeviceProps } from "../controller";
 import { useDeferEffect, useEventListener, useKeyPress } from "@rbxts/pretty-react-hooks";
 import { Players, UserInputService } from "@rbxts/services";
 import { useSettings } from "client/hooks/use-settings";
-import { onPhysics } from "shared/utils/per-frame";
 import { useConstant } from "client/hooks/use-constant";
+import { useOnPhysics } from "client/hooks/use-on-physics";
 
 export function ComputerController({
 	move,
@@ -65,7 +65,7 @@ export function ComputerController({
 		mouse.TargetFilter = pv;
 	}, [pv]);
 
-	useEventListener(onPhysics, () => {
+	useOnPhysics(() => {
 		if (mouse.Hit.Position !== hitPositionRef.current) {
 			hitPositionRef.current = mouse.Hit.Position;
 			point(mouse.Hit.Position);

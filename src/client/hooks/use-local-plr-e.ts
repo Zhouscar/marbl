@@ -4,6 +4,7 @@ import { Players } from "@rbxts/services";
 import { LAST_E } from "shared/constants/core";
 import { onTick } from "shared/utils/per-frame";
 import { getPlrE } from "shared/utils/player-utils";
+import { useOnTick } from "./use-on-tick";
 
 function _getLocalPlrE() {
 	return getPlrE(Players.LocalPlayer) ?? LAST_E;
@@ -11,7 +12,7 @@ function _getLocalPlrE() {
 
 let _localPlrE = _getLocalPlrE();
 
-onTick.Connect(() => {
+onTick(() => {
 	_localPlrE = _getLocalPlrE();
 });
 
@@ -19,7 +20,7 @@ export function useLocalPlrE() {
 	const [e, setE] = useState(_localPlrE);
 	const eRef = useLatest(e);
 
-	useEventListener(onTick, () => {
+	useOnTick(() => {
 		if (eRef.current === _localPlrE) return;
 		setE(_localPlrE);
 	});

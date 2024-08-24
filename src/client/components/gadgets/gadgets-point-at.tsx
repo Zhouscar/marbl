@@ -23,11 +23,11 @@ export function GadgetsPointAt() {
 	useEffect(() => {
 		if (part === undefined) return;
 
-		const connection = onTick.Connect(() => {
+		const disconnect = onTick(() => {
 			const cf = CFrame.lookAt(part.GetPivot().Position, worldState.pointAt);
 			rotationApi.spring(cf.Rotation, config.spring.wobbly);
 
-			for (const [e, gadgetPV, offset] of world.query(
+			for (const [_, gadgetPV, offset] of world.query(
 				PV,
 				GadgetRotationOffset,
 				pair(GadgetOf, localCharE),
@@ -42,9 +42,7 @@ export function GadgetsPointAt() {
 			}
 		});
 
-		return () => {
-			connection.Disconnect();
-		};
+		return disconnect;
 	}, [part]);
 
 	return <></>;

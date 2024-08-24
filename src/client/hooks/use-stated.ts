@@ -1,12 +1,12 @@
-import { useEventListener, useLatest } from "@rbxts/pretty-react-hooks";
+import { useLatest } from "@rbxts/pretty-react-hooks";
 import React, { useState } from "@rbxts/react";
-import { onTick } from "shared/utils/per-frame";
+import { useOnTick } from "./use-on-tick";
 
 export function useRefStated<T>(ref: React.MutableRefObject<T>) {
 	const [state, setState] = useState(ref.current);
 	const latestState = useLatest(state);
 
-	useEventListener(onTick, () => {
+	useOnTick(() => {
 		if (ref.current === latestState.current) return;
 		setState(ref.current);
 	});
@@ -18,7 +18,7 @@ export function useStated<T, U>(container: T, key: Extract<keyof T, U>) {
 	const [state, setState] = useState(container[key]);
 	const latestState = useLatest(state);
 
-	useEventListener(onTick, () => {
+	useOnTick(() => {
 		if (container[key] === latestState.current) return;
 		setState(container[key]);
 	});

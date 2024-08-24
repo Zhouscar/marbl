@@ -99,7 +99,9 @@ And something unique about the game.
 - [x] Marbl health
 - [x] Projectile damage
 
-- [ ] Prevent memory leak like ServerPV, or ServerE
+- [x] Prevent memory leak like ServerPV, or ServerE
+
+IDEA: health and energy steal of other enemies along side xp
 
 - [ ] Melee spin
 - [ ] Melee stab

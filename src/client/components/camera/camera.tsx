@@ -32,7 +32,7 @@ export function Camera() {
 	useEffect(() => {
 		if (pv === undefined) return;
 
-		const renderConnection = onRender.Connect(() => {
+		const disconnect = onRender(() => {
 			const rotation = CFrame.fromEulerAnglesYXZ(
 				rotationXSpring.getValue(),
 				rotationYSpring.getValue(),
@@ -54,12 +54,11 @@ export function Camera() {
 				);
 			}
 
-			camera.CFrame = _cf.sub(_cf.LookVector.mul(correctedDistance));
+			camera.FieldOfView = correctedDistance + 60;
+			camera.CFrame = _cf.sub(_cf.LookVector.mul(correctedDistance / 2));
 		});
 
-		return () => {
-			renderConnection.Disconnect();
-		};
+		return disconnect;
 	}, [pv]);
 
 	return <></>;

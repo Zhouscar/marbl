@@ -55,10 +55,11 @@ export function ReplicationReciever() {
 			const serverE = tonumber(serverEStr) as Entity;
 
 			if (e === undefined || world.get(e, ServerE) !== serverE) {
-				componentsToInsert.add({
-					component: ServerE,
-					data: tonumber(serverEStr) as Entity,
-				});
+				// componentsToInsert.add({
+				// 	component: ServerE,
+				// 	data: tonumber(serverEStr) as Entity,
+				// });
+				// This is now done on the servers side.
 				componentsToInsert.add({
 					component: AnotherHost,
 					isTag: true,

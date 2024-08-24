@@ -1,11 +1,60 @@
-import { RunService } from "@rbxts/services";
-import { IS_CLIENT } from "shared/constants/core";
+import { Players, RunService } from "@rbxts/services";
+import { IS_CLIENT, IS_SERVER } from "shared/constants/core";
 
 export type PerFrameFunction = (dt: number) => void;
 
-export const onRender = RunService.RenderStepped;
-export const onPhysics = RunService.Stepped;
-export const onTick = RunService.Heartbeat;
+const disconnects: (() => void)[] = [];
+if (IS_CLIENT) {
+	Players.PlayerRemoving.Connect((player) => {
+		if (player !== Players.LocalPlayer) return;
+		disconnects.forEach((disconnect) => {
+			disconnect();
+		});
+	});
+}
+if (IS_SERVER) {
+	game.BindToClose(() => {
+		disconnects.forEach((disconnect) => {
+			disconnect();
+		});
+	});
+}
+
+export function onRender(fn: (dt: number) => void) {
+	const connection = RunService.RenderStepped.Connect((dt) => {
+		fn(dt);
+	});
+	disconnects.push(() => {
+		connection.Disconnect();
+	});
+	return () => {
+		connection.Disconnect();
+	};
+}
+
+export function onPhysics(fn: (dt: number) => void) {
+	const connection = RunService.Stepped.Connect((_, dt) => {
+		fn(dt);
+	});
+	disconnects.push(() => {
+		connection.Disconnect();
+	});
+	return () => {
+		connection.Disconnect();
+	};
+}
+
+export function onTick(fn: (dt: number) => void) {
+	const connection = RunService.Heartbeat.Connect((dt) => {
+		fn(dt);
+	});
+	disconnects.push(() => {
+		connection.Disconnect();
+	});
+	return () => {
+		connection.Disconnect();
+	};
+}
 
 const renderFunctions: { priority: number; fn: PerFrameFunction }[] = [];
 const physicsFunctions: { priority: number; fn: PerFrameFunction }[] = [];
@@ -30,20 +79,20 @@ export function scheduleTick(fn: PerFrameFunction, priority: number = 0) {
 }
 
 if (IS_CLIENT) {
-	onRender.Connect((dt) => {
+	onRender((dt) => {
 		renderFunctions.forEach((context) => {
 			context.fn(dt);
 		});
 	});
 }
 
-onPhysics.Connect((_, dt) => {
+onPhysics((dt) => {
 	physicsFunctions.forEach((context) => {
 		context.fn(dt);
 	});
 });
 
-onTick.Connect((dt) => {
+onTick((dt) => {
 	tickFunctions.forEach((context) => {
 		context.fn(dt);
 	});
