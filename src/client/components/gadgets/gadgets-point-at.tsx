@@ -5,7 +5,12 @@ import { useMotion } from "client/hooks/ripple";
 import { useComponent } from "client/hooks/use-component";
 import { useLocalCharE } from "client/hooks/use-local-char-e";
 import { useWorldState } from "client/hooks/use-world-state";
-import { GadgetOf, GadgetRotationOffset, PV } from "shared/components";
+import {
+	GadgetImplicitAngularYMotion,
+	GadgetOf,
+	GadgetRotationOffset,
+	PV,
+} from "shared/components";
 import { Maybe } from "shared/utils/monads";
 import { onTick } from "shared/utils/per-frame";
 import { getPvPrimaryPart } from "shared/utils/pv-utils";
@@ -27,17 +32,18 @@ export function GadgetsPointAt() {
 			const cf = CFrame.lookAt(part.GetPivot().Position, worldState.pointAt);
 			rotationApi.spring(cf.Rotation, config.spring.wobbly);
 
-			for (const [_, gadgetPV, offset] of world.query(
+			for (const [e, gadgetPV, offset] of world.query(
 				PV,
 				GadgetRotationOffset,
 				pair(GadgetOf, localCharE),
 			)) {
-				const gadgetPart = getPvPrimaryPart(gadgetPV);
-				if (gadgetPart) {
-					gadgetPart.Anchored = true;
-				}
+				const angularYMotionValue =
+					world.get(e, GadgetImplicitAngularYMotion)?.api.get() ?? 0;
 				gadgetPV.PivotTo(
-					new CFrame(cf.Position).mul(rotationSpring.getValue()).mul(offset),
+					new CFrame(cf.Position)
+						.mul(rotationSpring.getValue())
+						.mul(offset)
+						.mul(CFrame.fromEulerAnglesYXZ(0, angularYMotionValue, 0)),
 				);
 			}
 		});

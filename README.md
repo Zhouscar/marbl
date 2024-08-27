@@ -103,8 +103,11 @@ And something unique about the game.
 
 IDEA: health and energy steal of other enemies along side xp
 
-- [ ] Melee spin
- - [ ] test
+- [x] Melee_spin spin
+- [ ] Melee_spin damage
+- [ ] Melee_spin bounce
+
+- [ ] gun cooldown
 
 - [ ] Melee stab
 

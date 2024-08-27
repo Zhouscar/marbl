@@ -41,18 +41,18 @@ export function Camera() {
 
 			const _cf = rotation.add(pv.GetPivot().Position);
 
-			let correctedDistance = cameraDistanceSpring.getValue();
-			const distanceCorrectionResult = Workspace.Raycast(
-				_cf.Position,
-				_cf.LookVector.mul(-(cameraDistanceSpring.getValue() + 2)),
-				raycastParams,
-			);
-			if (distanceCorrectionResult !== undefined) {
-				correctedDistance = math.max(
-					distanceCorrectionResult.Position.sub(_cf.Position).Magnitude - 2,
-					2,
-				);
-			}
+			const correctedDistance = cameraDistanceSpring.getValue();
+			// const distanceCorrectionResult = Workspace.Raycast(
+			// 	_cf.Position,
+			// 	_cf.LookVector.mul(-(cameraDistanceSpring.getValue() + 2)),
+			// 	raycastParams,
+			// );
+			// if (distanceCorrectionResult !== undefined) {
+			// 	correctedDistance = math.max(
+			// 		distanceCorrectionResult.Position.sub(_cf.Position).Magnitude - 2,
+			// 		2,
+			// 	);
+			// }
 
 			camera.FieldOfView = correctedDistance + 60;
 			camera.CFrame = _cf.sub(_cf.LookVector.mul(correctedDistance / 2));

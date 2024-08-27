@@ -13,7 +13,7 @@ remotes.players.spawn.connect((player) => {
 		material: Enum.Material.Metal,
 		gadgets: [
 			{ gadgetName: "test", rotationOffset: CFrame.fromEulerAnglesYXZ(0, 0, 0) },
-			// { gadgetName: "test", rotationOffset: CFrame.fromEulerAnglesYXZ(0, math.pi, 0) },
+			{ gadgetName: "testMelee", rotationOffset: CFrame.fromEulerAnglesYXZ(0, math.pi, 0) },
 		],
 	});
 });
