@@ -104,6 +104,8 @@ And something unique about the game.
 IDEA: health and energy steal of other enemies along side xp
 
 - [ ] Melee spin
+ - [ ] test
+
 - [ ] Melee stab
 
 - [ ] Marbl death
