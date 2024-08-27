@@ -103,15 +103,15 @@ And something unique about the game.
 
 IDEA: health and energy steal of other enemies along side xp
 
-- [x] Melee_spin spin
-- [ ] Melee_spin damage
-- [ ] Melee_spin bounce
+- [x] melee_spin spin
+- [ ] melee_spin damage
+- [ ] melee_spin bounce
 
 - [ ] gun cooldown
 
-- [ ] Melee stab
+- [ ] melee stab
 
-- [ ] Gun_auto
+- [ ] gun_auto
 
 - [ ] Marbl death
 
