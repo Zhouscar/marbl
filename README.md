@@ -111,6 +111,8 @@ IDEA: health and energy steal of other enemies along side xp
 
 - [ ] Melee stab
 
+- [ ] Gun_auto
+
 - [ ] Marbl death
 
 - [ ] Enemy (AI, weapon)
