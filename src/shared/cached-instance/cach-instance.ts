@@ -7,6 +7,11 @@ const track = makeTrack(CachedInstance);
 scheduleTick(() => {
 	track((changes) => {
 		for (const [e, _, prevCachedInstance] of changes.changed()) {
+			const trail = prevCachedInstance.instance.FindFirstChildWhichIsA("Trail");
+			if (trail) {
+				trail.Enabled = false;
+			}
+
 			prevCachedInstance.objectCache.ReturnPart(prevCachedInstance.instance);
 		}
 

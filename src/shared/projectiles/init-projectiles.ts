@@ -31,6 +31,7 @@ const projectileAsset = waitForPath(
 };
 
 projectileAsset.trail.Enabled = false;
+projectileAsset.Anchored = true;
 
 const projectileCache = new ObjectCache(
 	projectileAsset,
@@ -42,6 +43,22 @@ const projectileCache = new ObjectCache(
 );
 
 scheduleTick(() => {
+	if (IS_CLIENT) {
+		for (const [e, { initialPosition, initialVelocity }] of world
+			.query(Positioner, IsProjectile)
+			.without(CachedInstance)) {
+			const instance = projectileCache.GetPart(
+				CFrame.lookAlong(initialPosition, initialVelocity),
+			);
+			instance.trail.Enabled = true;
+
+			world.set(e, CachedInstance, {
+				instance,
+				objectCache: projectileCache,
+			});
+		}
+	}
+
 	for (const [e, context] of world.query(InitProjectile)) {
 		world.add(e, IsProjectile);
 

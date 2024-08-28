@@ -1,4 +1,3 @@
-import { useEventListener } from "@rbxts/pretty-react-hooks";
 import React from "@rbxts/react";
 import { useOnTick } from "client/hooks/use-on-tick";
 import { CachedInstance, Positioner } from "shared/components";

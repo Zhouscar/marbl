@@ -1,9 +1,9 @@
-import { pair } from "@rbxts/jecs";
 import {
 	AnotherHost,
 	CachedInstance,
 	InitDamage,
 	InitProjectileHit,
+	IsProjectile,
 	Positioner,
 	ProjectileDamageWhenHit,
 	ProjectileEndTime,
@@ -43,5 +43,9 @@ scheduleTick(() => {
 		world.set(e, ProjectileHitCF, CFrame.lookAlong(context.position, context.direction));
 
 		world.remove(e, InitProjectileHit);
+	}
+
+	for (const [e, _] of world.query(CachedInstance, IsProjectile).without(Positioner)) {
+		world.remove(e, CachedInstance); // this can cause problems for none positioner projectiles
 	}
 });
