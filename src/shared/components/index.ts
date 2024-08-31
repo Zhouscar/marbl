@@ -6,3 +6,4 @@ export * from "./gadgets";
 export * from "./projectiles";
 export * from "./positioner";
 export * from "./health";
+export * from "./caster";

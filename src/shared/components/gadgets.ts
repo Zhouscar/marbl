@@ -35,3 +35,5 @@ export const GadgetImplicitAngularYMotion = world.component<{
 	goal: number;
 	api: Motion<number>;
 }>();
+
+export const GadgetMeleeSpinRotationTimes = world.component<number>();

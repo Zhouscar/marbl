@@ -104,6 +104,8 @@ And something unique about the game.
 IDEA: health and energy steal of other enemies along side xp
 
 - [x] melee_spin spin
+- [x] melee_spin raycast
+
 - [ ] melee_spin damage
 - [ ] melee_spin bounce
 
